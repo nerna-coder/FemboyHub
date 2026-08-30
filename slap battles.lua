@@ -6,7 +6,7 @@ local success, err = pcall(function()
 end)
 
 if not success or not Rayfield then
-    warn("Ошибка при загрузке Rayfield UI: " .. tostring(err))
+    warn("error Rayfield UI: " .. tostring(err))
     return
 end
 
@@ -42,6 +42,59 @@ local function runSuctionCode()
                 task.wait(0.4)
             end
         end
+    end)
+end
+
+local function runAutoGetWater()
+    task.spawn(function()
+        local _call3 = game:GetService('ReplicatedStorage')
+        local _call5 = _call3:WaitForChild('AlchemistEvent')
+        local _call7 = _call3:WaitForChild('GeneralAbility')
+        local _call9 = workspace:FindFirstChild('Alchemist', true)
+
+        local function brew(items)
+            _call7:FireServer()
+            for _, item in ipairs(items) do
+                _call5:FireServer('AddItem', item)
+                _call5:FireServer('MixItem', item)
+            end
+            _call5:FireServer('BrewPotion')
+            task.wait(0)
+        end
+
+        if _call9 and _call9:FindFirstChild('ClickDetector') then
+            fireclickdetector(_call9.ClickDetector)
+            task.wait(0.2)
+        end
+
+        brew({'Mushroom'})
+        brew({'Dark Root', 'Dark Root', 'Dark Root'})
+        brew({'Red Crystal', 'Blue Crystal', 'Glowing Mushroom'})
+        brew({'Plane Flower', 'Plane Flower'})
+        brew({'Autumn Sprout', 'Jade Stone'})
+        brew({'Dire Flower', 'Red Crystal', 'Wild Vine'})
+        brew({'Hazel Lily', 'Hazel Lily', 'Blue Crystal'})
+        brew({'Fire Flower', 'Fire Flower', 'Red Crystal'})
+        brew({'Mushroom', 'Mushroom', 'Elder Wood'})
+        brew({'Dark Root', 'Dark Root', 'Blood Rose', 'Red Crystal'})
+        brew({'Winter Rose', 'Winter Rose', 'Wild Vine', 'Blue Crystal', 'Glowing Mushroom'})
+        brew({'Mushroom', 'Mushroom', 'Plane Flower', 'Hazel Lily', 'Blue Crystal'})
+        brew({'Mushroom', 'Mushroom', 'Blue Crystal', 'Blue Crystal', 'Jade Stone', 'Plane Flower'})
+        brew({'Mushroom', 'Hazel Lily'})
+        brew({'Plane Flower', 'Plane Flower', 'Blue Crystal', 'Elder Wood', 'Glowing Mushroom'})
+
+        local bigRecipe1 = {}
+        for i = 1, 10 do table.insert(bigRecipe1, 'Blood Rose') end
+        for i = 1, 10 do table.insert(bigRecipe1, 'Dark Root') end
+        brew(bigRecipe1)
+
+        brew({'Plane Flower', 'Plane Flower'})
+        brew({'Cake Mix'})
+        brew({'Wild Vine', 'Wild Vine', 'Wild Vine', 'Blood Rose', 'Dark Root', 'Elder Wood', 'Jade Stone'})
+        brew({'Plane Flower', 'Plane Flower', 'Hazel Lily'})
+        brew({'Elder Wood', 'Elder Wood', 'Elder Wood', 'Blue Crystal', 'Red Crystal'})
+        brew({'Jade Stone', 'Jade Stone', 'Blue Crystal'})
+        brew({'Wild Vine', 'Wild Vine', 'Elder Wood'})
     end)
 end
 
@@ -1913,6 +1966,13 @@ else
         Name = "Auto-Get Alchemist",
         Callback = function()
             runAutoGetAlchemist()
+        end
+    })
+
+    Tab1:CreateButton({
+        Name = "Auto-Get water",
+        Callback = function()
+            runAutoGetWater()
         end
     })
 
