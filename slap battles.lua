@@ -45,9 +45,7 @@ local function runSuctionCode()
     end)
 end
 
--- ==========================================
--- ФУНКЦИЯ ДЛЯ КНОПКИ Auto-Get Bob (by nexer)
--- ==========================================
+
 local function runAutoGetBob()
     local LocalPlayer, LP = game:GetService("Players").LocalPlayer, game:GetService("Players").LocalPlayer
     local Character, Char
@@ -2034,9 +2032,9 @@ else
 
     local Tab1 = Window:CreateTab("Slap Battles Badges", 4483345998)
 
-    -- Добавленная кнопка Auto-Get Bob (by nexer) в главную вкладку
+  
     Tab1:CreateButton({
-        Name = "Auto-Get Bob (by nexer)",
+        Name = "Auto-Get Bob required counter (by nexer)",
         Callback = function()
             runAutoGetBob()
         end
