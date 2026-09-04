@@ -45,129 +45,6 @@ local function runSuctionCode()
     end)
 end
 
-
-local function runAutoGetBob()
-    local LocalPlayer, LP = game:GetService("Players").LocalPlayer, game:GetService("Players").LocalPlayer
-    local Character, Char
-    local HumanoidRootPart, HRP
-    local Humanoid, Hum
-    local headconn
-    pcall(function()
-    Character, Char = LocalPlayer.Character, LocalPlayer.Character
-    end)
-    pcall(function()
-    HumanoidRootPart, HRP = Character.HumanoidRootPart, Character.HumanoidRootPart
-    end)
-    pcall(function()
-    Humanoid, Hum = Character.Humanoid, Character.Humanoid
-    end)
-
-    if string.find(identifyexecutor(), "Xeno") or string.find(identifyexecutor(), "Solara") then
-    local FixedFunctions = loadstring(game:HttpGet("https://raw.githubusercontent.com/Articles-Hub/ROBLOXScript/refs/heads/main/SCRIPT/Fix.lua"))()
-    getgenv().fireclickdetector = FixedFunctions.fireclickdetector
-    getgenv().fireproximityprompt = FixedFunctions.fireproximityprompt
-    end
-
-    local SelectGlove = function(g) repeat task.wait(.1) fireclickdetector(workspace.Lobby[g]:FindFirstChildWhichIsA("ClickDetector",true)) until LocalPlayer.leaderstats.Glove.Value==g task.wait(.1) end
-
-    local msghint = Instance.new("Hint")
-    msghint.Parent = game:GetService("CoreGui")
-    msghint.Text = "Getting ready... (1/4)"
-    if workspace:FindFirstChild("ÅBOB_"..LocalPlayer.Name) then
-    workspace["ÅBOB_"..LocalPlayer.Name]:Destroy()
-    end
-    task.spawn(function()
-    repeat task.wait()
-    HumanoidRootPart:PivotTo(CFrame.new(-125, -5, 121))
-    task.wait()
-    until Humanoid.Health==0
-    end)
-    task.wait(2.5) -- Waiting so that player gets locked here ( very important btw )
-    msghint.Text = "Getting ready... (2/4)"
-    SelectGlove("Counter")
-    game:GetService("ReplicatedStorage").Counter:FireServer() -- This can set isinarena to true
-    repeat task.wait() until Character.isInArena.Value==true
-    msghint.Text = "Getting ready... (3/4)"
-    SelectGlove("Screwdriver")
-    game:GetService("ReplicatedStorage").GeneralAbility:FireServer() -- This anchors humanoidrootpart
-    task.wait(1)
-    msghint.Text = "Getting ready... (4/4)"
-    SelectGlove("Replica")
-    local msghint = Instance.new("Hint")
-    msghint.Parent = game:GetService("CoreGui")
-    msghint.Text = "Waiting for bob... ( Just wait, can take 30+ seconds )"
-    game:GetService("RunService").RenderStepped:Connect(function()
-    game:GetService("GuiService"):ClearError()
-    pcall(function()
-    game:GetService("CoreGui").RobloxLoadingGUI:Destroy()
-    end)
-    end)
-    for i=1,200000 do
-    game:GetService("ReplicatedStorage").Duplicate:FireServer(true) -- Replica can't spawn with anchored humanoidrootpart
-    end
-    repeat task.wait() until workspace:FindFirstChild("ÅBOB_"..LocalPlayer.Name) -- But bob can :)))
-    msghint.Text = "Bob appeared. Rejoining to revert lags..."
-    task.wait(3)
-    while task.wait(.05) do
-    task.spawn(function()
-    game:GetService("TeleportService"):TeleportToPlaceInstance(game.PlaceId, game.JobId, LocalPlayer)
-    end)
-    end
-end
-
-local function runAutoGetWater()
-    task.spawn(function()
-        local _call3 = game:GetService('ReplicatedStorage')
-        local _call5 = _call3:WaitForChild('AlchemistEvent')
-        local _call7 = _call3:WaitForChild('GeneralAbility')
-        local _call9 = workspace:FindFirstChild('Alchemist', true)
-
-        local function brew(items)
-            _call7:FireServer()
-            for _, item in ipairs(items) do
-                _call5:FireServer('AddItem', item)
-                _call5:FireServer('MixItem', item)
-            end
-            _call5:FireServer('BrewPotion')
-            task.wait(0)
-        end
-
-        if _call9 and _call9:FindFirstChild('ClickDetector') then
-            fireclickdetector(_call9.ClickDetector)
-            task.wait(0.2)
-        end
-
-        brew({'Mushroom'})
-        brew({'Dark Root', 'Dark Root', 'Dark Root'})
-        brew({'Red Crystal', 'Blue Crystal', 'Glowing Mushroom'})
-        brew({'Plane Flower', 'Plane Flower'})
-        brew({'Autumn Sprout', 'Jade Stone'})
-        brew({'Dire Flower', 'Red Crystal', 'Wild Vine'})
-        brew({'Hazel Lily', 'Hazel Lily', 'Blue Crystal'})
-        brew({'Fire Flower', 'Fire Flower', 'Red Crystal'})
-        brew({'Mushroom', 'Mushroom', 'Elder Wood'})
-        brew({'Dark Root', 'Dark Root', 'Blood Rose', 'Red Crystal'})
-        brew({'Winter Rose', 'Winter Rose', 'Wild Vine', 'Blue Crystal', 'Glowing Mushroom'})
-        brew({'Mushroom', 'Mushroom', 'Plane Flower', 'Hazel Lily', 'Blue Crystal'})
-        brew({'Mushroom', 'Mushroom', 'Blue Crystal', 'Blue Crystal', 'Jade Stone', 'Plane Flower'})
-        brew({'Mushroom', 'Hazel Lily'})
-        brew({'Plane Flower', 'Plane Flower', 'Blue Crystal', 'Elder Wood', 'Glowing Mushroom'})
-
-        local bigRecipe1 = {}
-        for i = 1, 10 do table.insert(bigRecipe1, 'Blood Rose') end
-        for i = 1, 10 do table.insert(bigRecipe1, 'Dark Root') end
-        brew(bigRecipe1)
-
-        brew({'Plane Flower', 'Plane Flower'})
-        brew({'Cake Mix'})
-        brew({'Wild Vine', 'Wild Vine', 'Wild Vine', 'Blood Rose', 'Dark Root', 'Elder Wood', 'Jade Stone'})
-        brew({'Plane Flower', 'Plane Flower', 'Hazel Lily'})
-        brew({'Elder Wood', 'Elder Wood', 'Elder Wood', 'Blue Crystal', 'Red Crystal'})
-        brew({'Jade Stone', 'Jade Stone', 'Blue Crystal'})
-        brew({'Wild Vine', 'Wild Vine', 'Elder Wood'})
-    end)
-end
-
 local function runAutoGetCamera()
     task.spawn(function()
         local Players      = game:GetService("Players")
@@ -568,6 +445,27 @@ local function runAutoGetSand()
     end
 end
 
+-- Функция для Auto-Get frostbite (телепортация и очередь)
+local function runAutoGetFrostbite()
+    local teleportFunc = queueonteleport or queue_on_teleport
+    if teleportFunc then
+        teleportFunc([[
+            if not game:IsLoaded() then
+                game.Loaded:Wait()
+            end
+            repeat task.wait() until game.Players.LocalPlayer and game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+            game.Players.LocalPlayer.Character.HumanoidRootPart.CFrame = CFrame.new(-554, 177, 56)
+            task.wait(0.7)
+            for _, v in ipairs(workspace:GetDescendants()) do
+                if v:IsA("ProximityPrompt") then
+                    fireproximityprompt(v)
+                end
+            end
+        ]])
+    end
+    game:GetService("TeleportService"):Teleport(17290438723)
+end
+
 local Window
 
 if placeId == 122902713960550 then
@@ -603,6 +501,42 @@ if placeId == 122902713960550 then
 
     Button.MouseButton1Click:Connect(function()
         runAutoGetSand()
+    end)
+
+-- Отдельное ГУИ для плейса 17290438723
+elseif placeId == 17290438723 then
+    local ScreenGui = Instance.new("ScreenGui")
+    local MainFrame = Instance.new("Frame")
+    local UICorner = Instance.new("UICorner")
+    local Button = Instance.new("TextButton")
+    local UICorner_2 = Instance.new("UICorner")
+
+    ScreenGui.Name = "FrostbiteGui"
+    ScreenGui.Parent = game:GetService("CoreGui")
+    ScreenGui.ResetOnSpawn = false
+
+    MainFrame.Name = "MainFrame"
+    MainFrame.Parent = ScreenGui
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
+    MainFrame.Size = UDim2.new(0, 220, 0, 90)
+
+    UICorner.Parent = MainFrame
+
+    Button.Name = "AutoGetFrostbiteButton"
+    Button.Parent = MainFrame
+    Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    Button.Position = UDim2.new(0.08, 0, 0.2, 0)
+    Button.Size = UDim2.new(0, 185, 0, 50)
+    Button.Font = Enum.Font.SourceSansBold
+    Button.Text = "Auto-Get frostbite"
+    Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Button.TextSize = 18
+
+    UICorner_2.Parent = Button
+
+    Button.MouseButton1Click:Connect(function()
+        runAutoGetFrostbite()
     end)
 
 elseif placeId == 11828384869 then
@@ -2032,14 +1966,6 @@ else
 
     local Tab1 = Window:CreateTab("Slap Battles Badges", 4483345998)
 
-  
-    Tab1:CreateButton({
-        Name = "Auto-Get Bob required counter (by nexer)",
-        Callback = function()
-            runAutoGetBob()
-        end
-    })
-
     Tab1:CreateButton({
         Name = "Auto-Get Alchemist",
         Callback = function()
@@ -2048,16 +1974,16 @@ else
     })
 
     Tab1:CreateButton({
-        Name = "Auto-Get water",
+        Name = "Auto-Get sand",
         Callback = function()
-            runAutoGetWater()
+            runAutoGetSand()
         end
     })
 
     Tab1:CreateButton({
-        Name = "Auto-Get sand",
+        Name = "Auto-Get frostbite",
         Callback = function()
-            runAutoGetSand()
+            runAutoGetFrostbite()
         end
     })
 
@@ -2381,34 +2307,6 @@ end
                                     end
                                 end
                             end
-                            if tape.Front.ProximityPrompt.Enabled then rec = false end
-                        end
-                        reset()
-                        equipGlove("Pocket")
-                        root = gethrp()
-                        if root then
-                            root.CFrame = CFrame.new(-1210.02, 331.92, 3.47, 0.018, 0, 1, 0, 1, 0, -1, 0, 0.018)
-                            task.wait(0.5)
-                            root.CFrame = CFrame.new(123.28, 255.30, 1.05, 0.998, 0, -0.055, 0, 1, 0, 0.055, 0, 0.998)
-                            task.wait(0.5)
-                            root.CFrame = CFrame.new(17944.88, -130.16, -3492.70, -0.998, 0, -0.070, 0, 1, 0, 0.070, 0, -0.998)
-                            task.wait(0.5)
-                        end
-                        local rem = ReplicatedStorage:FindFirstChild("GeneralAbility")
-                        if rem and root then rem:FireServer(root.CFrame) end
-                        local pocket = nil
-                        local t = tick() + 10
-                        repeat
-                            task.wait(0.2)
-                            for _, v in ipairs(Workspace:GetChildren()) do
-                                if v:IsA("Model") and string.find(v.Name, "'s Pocket") then
-                                    if v:FindFirstChildWhichIsA("ProximityPrompt", true) then pocket = v break end
-                                end
-                            end
-                        until pocket or tick() > t
-                        if pocket then
-                            local prompt = pocket:FindFirstChildWhichIsA("ProximityPrompt", true)
-                            if prompt then fireproximityprompt(prompt) end
                         end
                     end
                 end
