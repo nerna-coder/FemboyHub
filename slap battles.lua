@@ -539,6 +539,72 @@ elseif placeId == 17290438723 then
         runAutoGetFrostbite()
     end)
 
+elseif placeId == 14422118326 then
+    local ScreenGui = Instance.new("ScreenGui")
+    local MainFrame = Instance.new("Frame")
+    local UICorner = Instance.new("UICorner")
+    local UIListLayout = Instance.new("UIListLayout")
+
+    local function createButton(name, text, callback)
+        local btn = Instance.new("TextButton")
+        local corner = Instance.new("UICorner")
+        
+        btn.Name = name
+        btn.Parent = MainFrame
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        btn.Size = UDim2.new(0, 185, 0, 40)
+        btn.Font = Enum.Font.SourceSansBold
+        btn.Text = text
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.TextSize = 16
+        
+        corner.Parent = btn
+        btn.MouseButton1Click:Connect(callback)
+        return btn
+    end
+
+    ScreenGui.Name = "CustomHubGui"
+    ScreenGui.Parent = game:GetService("CoreGui")
+    ScreenGui.ResetOnSpawn = false
+
+    MainFrame.Name = "MainFrame"
+    MainFrame.Parent = ScreenGui
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
+    MainFrame.Size = UDim2.new(0, 220, 0, 160)
+
+    UICorner.Parent = MainFrame
+
+    UIListLayout.Parent = MainFrame
+    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 10)
+
+    createButton("GetNullButton", "Get null", function()
+        pcall(function()
+            local char = lp.Character or lp.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            hrp.CFrame = CFrame.new(5456.61, -189.00, 1853.98, -0.951, -0.000, 0.308, -0.000, 1.000, 0.000, -0.308, 0.000, -0.951)
+        end)
+    end)
+
+    createButton("GetTinkerButton", "Get tinker", function()
+        pcall(function()
+            local char = lp.Character or lp.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            hrp.CFrame = CFrame.new(4834.91, -214.00, 802.50, 0.052, 0.000, 0.999, -0.000, 1.000, -0.000, -0.999, -0.000, 0.052)
+        end)
+    end)
+
+    createButton("GetRobPlushieButton", "Get rob plushie", function()
+        pcall(function()
+            local char = lp.Character or lp.CharacterAdded:Wait()
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            hrp.CFrame = CFrame.new(5260.08, -139.20, 864.11, -0.717, 0.000, -0.697, 0.000, 1.000, 0.000, 0.697, -0.000, -0.717)
+        end)
+    end)
+
 elseif placeId == 11828384869 then
     Window = Rayfield:CreateWindow({
         Name = "Femboy Hub - Counter & Elude",
@@ -2293,7 +2359,7 @@ end
                         task.wait(0.15)
                         local code = ""
                         local rec = true
-                        local sfx = tape.Front:FindFirstChild("DigitsSFX")
+                        sfx = tape.Front:FindFirstChild("DigitsSFX")
                         while rec do
                             task.wait()
                             if sfx then
