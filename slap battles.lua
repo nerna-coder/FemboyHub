@@ -537,21 +537,12 @@ elseif placeId == 17290438723 then
         runAutoGetFrostbite()
     end)
 
--- НОВЫЙ ПЛЕЙС 14422118326 С КАСТОМНЫМ ГУИ КАК НА ФОТКЕ
+-- НОВЫЙ ОТДЕЛЬНЫЙ GUI ДЛЯ ПЛЕЙСА 14422118326
 elseif placeId == 14422118326 then
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
-    local TitleLabel = Instance.new("TextLabel")
-    
-    local BtnNull = Instance.new("TextButton")
-    local UICornerNull = Instance.new("UICorner")
-    
-    local BtnTinker = Instance.new("TextButton")
-    local UICornerTinker = Instance.new("UICorner")
-    
-    local BtnPlushie = Instance.new("TextButton")
-    local UICornerPlushie = Instance.new("UICorner")
+    local UIListLayout = Instance.new("UIListLayout")
 
     ScreenGui.Name = "FemboyHubCustomGui"
     ScreenGui.Parent = game:GetService("CoreGui")
@@ -559,93 +550,56 @@ elseif placeId == 14422118326 then
 
     MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
-    MainFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 28)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
     MainFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
-    MainFrame.Size = UDim2.new(0, 240, 0, 245)
+    MainFrame.Size = UDim2.new(0, 220, 0, 220)
 
-    UICorner.CornerRadius = UDim.new(0, 8)
     UICorner.Parent = MainFrame
 
-    TitleLabel.Name = "TitleLabel"
-    TitleLabel.Parent = MainFrame
-    TitleLabel.BackgroundTransparency = 1
-    TitleLabel.Position = UDim2.new(0.05, 0, 0.05, 0)
-    TitleLabel.Size = UDim2.new(0.9, 0, 0, 30)
-    TitleLabel.Font = Enum.Font.SourceSansBold
-    TitleLabel.Text = "Femboy Hub"
-    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
-    TitleLabel.TextSize = 20
-    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
+    UIListLayout.Parent = MainFrame
+    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
+    UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
+    UIListLayout.Padding = UDim.new(0, 10)
 
-    -- Кнопка Get Null
-    BtnNull.Name = "GetNullButton"
-    BtnNull.Parent = MainFrame
-    BtnNull.BackgroundColor3 = Color3.fromRGB(38, 38, 44)
-    BtnNull.Position = UDim2.new(0.05, 0, 0.24, 0)
-    BtnNull.Size = UDim2.new(0.9, 0, 0, 50)
-    BtnNull.Font = Enum.Font.SourceSansBold
-    BtnNull.Text = "Get Null"
-    BtnNull.TextColor3 = Color3.fromRGB(255, 255, 255)
-    BtnNull.TextSize = 16
+    local function createCustomButton(text, callback)
+        local btn = Instance.new("TextButton")
+        local corner = Instance.new("UICorner")
 
-    UICornerNull.CornerRadius = UDim.new(0, 6)
-    UICornerNull.Parent = BtnNull
+        btn.Parent = MainFrame
+        btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        btn.Size = UDim2.new(0, 185, 0, 40)
+        btn.Font = Enum.Font.SourceSansBold
+        btn.Text = text
+        btn.TextColor3 = Color3.fromRGB(255, 255, 255)
+        btn.TextSize = 16
 
-    BtnNull.MouseButton1Click:Connect(function()
+        corner.Parent = btn
+
+        btn.MouseButton1Click:Connect(callback)
+    end
+
+    createCustomButton("Get Null", function()
         pcall(function()
             local char = lp.Character or lp.CharacterAdded:Wait()
-            local hrp = char:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                hrp.CFrame = CFrame.new(5456.61, -189.00, 1853.98, -0.951, -0.000, 0.308, -0.000, 1.000, 0.000, -0.308, 0.000, -0.951)
-            end
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            hrp.CFrame = CFrame.new(5456.61, -189.00, 1853.98, -0.951, -0.000, 0.308, -0.000, 1.000, 0.000, -0.308, 0.000, -0.951)
         end)
     end)
 
-    -- Кнопка Get Tinker
-    BtnTinker.Name = "GetTinkerButton"
-    BtnTinker.Parent = MainFrame
-    BtnTinker.BackgroundColor3 = Color3.fromRGB(38, 38, 44)
-    BtnTinker.Position = UDim2.new(0.05, 0, 0.50, 0)
-    BtnTinker.Size = UDim2.new(0.9, 0, 0, 50)
-    BtnTinker.Font = Enum.Font.SourceSansBold
-    BtnTinker.Text = "Get Tinker"
-    BtnTinker.TextColor3 = Color3.fromRGB(255, 255, 255)
-    BtnTinker.TextSize = 16
-
-    UICornerTinker.CornerRadius = UDim.new(0, 6)
-    UICornerTinker.Parent = BtnTinker
-
-    BtnTinker.MouseButton1Click:Connect(function()
+    createCustomButton("Get Tinker", function()
         pcall(function()
             local char = lp.Character or lp.CharacterAdded:Wait()
-            local hrp = char:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                hrp.CFrame = CFrame.new(4834.91, -214.00, 802.50, 0.052, 0.000, 0.999, -0.000, 1.000, -0.000, -0.999, -0.000, 0.052)
-            end
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            hrp.CFrame = CFrame.new(4834.91, -214.00, 802.50, 0.052, 0.000, 0.999, -0.000, 1.000, -0.000, -0.999, -0.000, 0.052)
         end)
     end)
 
-    -- Кнопка Get Rob Plushie
-    BtnPlushie.Name = "GetRobPlushieButton"
-    BtnPlushie.Parent = MainFrame
-    BtnPlushie.BackgroundColor3 = Color3.fromRGB(38, 38, 44)
-    BtnPlushie.Position = UDim2.new(0.05, 0, 0.76, 0)
-    BtnPlushie.Size = UDim2.new(0.9, 0, 0, 50)
-    BtnPlushie.Font = Enum.Font.SourceSansBold
-    BtnPlushie.Text = "Get Rob Plushie"
-    BtnPlushie.TextColor3 = Color3.fromRGB(255, 255, 255)
-    BtnPlushie.TextSize = 16
-
-    UICornerPlushie.CornerRadius = UDim.new(0, 6)
-    UICornerPlushie.Parent = BtnPlushie
-
-    BtnPlushie.MouseButton1Click:Connect(function()
+    createCustomButton("Get Rob Plushie", function()
         pcall(function()
             local char = lp.Character or lp.CharacterAdded:Wait()
-            local hrp = char:FindFirstChild("HumanoidRootPart")
-            if hrp then
-                hrp.CFrame = CFrame.new(5260.08, -139.20, 864.11, -0.717, 0.000, -0.697, 0.000, 1.000, 0.000, 0.697, -0.000, -0.717)
-            end
+            local hrp = char:WaitForChild("HumanoidRootPart")
+            hrp.CFrame = CFrame.new(5260.08, -139.20, 864.11, -0.717, 0.000, -0.697, 0.000, 1.000, 0.000, 0.697, -0.000, -0.717)
         end)
     end)
 
@@ -2376,7 +2330,7 @@ end
                         local stats = lp:FindFirstChild("leaderstats")
                         if stats and stats:FindFirstChild("Glove") and stats.Glove.Value ~= glove then
                             if lp.Character and not lp.Character:FindFirstChild("entered") then
-                                local g = Workspace.Lobby:FindFirstChild("Glove")
+                                local g = Workspace.Lobby:FindFirstChild(glove)
                                 if g and g:FindFirstChild("ClickDetector") then
                                     fireclickdetector(g.ClickDetector)
                                     task.wait(0.5)
