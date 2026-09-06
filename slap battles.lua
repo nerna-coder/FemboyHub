@@ -445,7 +445,6 @@ local function runAutoGetSand()
     end
 end
 
--- Функция для Auto-Get frostbite (телепортация и очередь)
 local function runAutoGetFrostbite()
     local teleportFunc = queueonteleport or queue_on_teleport
     if teleportFunc then
@@ -503,7 +502,6 @@ if placeId == 122902713960550 then
         runAutoGetSand()
     end)
 
--- Отдельное ГУИ для плейса 17290438723
 elseif placeId == 17290438723 then
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
@@ -539,45 +537,61 @@ elseif placeId == 17290438723 then
         runAutoGetFrostbite()
     end)
 
--- Отдельное ГУИ для плейса 14422118326 (с тремя кнопками телепортации)
+-- НОВЫЙ ПЛЕЙС 14422118326 С КАСТОМНЫМ ГУИ КАК НА ФОТКЕ
 elseif placeId == 14422118326 then
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
-    local UIListLayout = Instance.new("UIListLayout")
+    local TitleLabel = Instance.new("TextLabel")
+    
+    local BtnNull = Instance.new("TextButton")
+    local UICornerNull = Instance.new("UICorner")
+    
+    local BtnTinker = Instance.new("TextButton")
+    local UICornerTinker = Instance.new("UICorner")
+    
+    local BtnPlushie = Instance.new("TextButton")
+    local UICornerPlushie = Instance.new("UICorner")
 
-    ScreenGui.Name = "HubCustomGui"
+    ScreenGui.Name = "FemboyHubCustomGui"
     ScreenGui.Parent = game:GetService("CoreGui")
     ScreenGui.ResetOnSpawn = false
 
     MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
-    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(24, 24, 28)
     MainFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
-    MainFrame.Size = UDim2.new(0, 220, 0, 180)
+    MainFrame.Size = UDim2.new(0, 240, 0, 245)
 
+    UICorner.CornerRadius = UDim.new(0, 8)
     UICorner.Parent = MainFrame
 
-    UIListLayout.Parent = MainFrame
-    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
-    UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Padding = UDim.new(0, 10)
+    TitleLabel.Name = "TitleLabel"
+    TitleLabel.Parent = MainFrame
+    TitleLabel.BackgroundTransparency = 1
+    TitleLabel.Position = UDim2.new(0.05, 0, 0.05, 0)
+    TitleLabel.Size = UDim2.new(0.9, 0, 0, 30)
+    TitleLabel.Font = Enum.Font.SourceSansBold
+    TitleLabel.Text = "Femboy Hub"
+    TitleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    TitleLabel.TextSize = 20
+    TitleLabel.TextXAlignment = Enum.TextXAlignment.Left
 
-    -- Кнопка 1: Get Null
-    local btnNull = Instance.new("TextButton")
-    local cornerNull = Instance.new("UICorner")
-    btnNull.Name = "GetNullButton"
-    btnNull.Parent = MainFrame
-    btnNull.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btnNull.Size = UDim2.new(0, 185, 0, 40)
-    btnNull.Font = Enum.Font.SourceSansBold
-    btnNull.Text = "get null"
-    btnNull.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btnNull.TextSize = 16
-    cornerNull.Parent = btnNull
+    -- Кнопка Get Null
+    BtnNull.Name = "GetNullButton"
+    BtnNull.Parent = MainFrame
+    BtnNull.BackgroundColor3 = Color3.fromRGB(38, 38, 44)
+    BtnNull.Position = UDim2.new(0.05, 0, 0.24, 0)
+    BtnNull.Size = UDim2.new(0.9, 0, 0, 50)
+    BtnNull.Font = Enum.Font.SourceSansBold
+    BtnNull.Text = "Get Null"
+    BtnNull.TextColor3 = Color3.fromRGB(255, 255, 255)
+    BtnNull.TextSize = 16
 
-    btnNull.MouseButton1Click:Connect(function()
+    UICornerNull.CornerRadius = UDim.new(0, 6)
+    UICornerNull.Parent = BtnNull
+
+    BtnNull.MouseButton1Click:Connect(function()
         pcall(function()
             local char = lp.Character or lp.CharacterAdded:Wait()
             local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -587,20 +601,21 @@ elseif placeId == 14422118326 then
         end)
     end)
 
-    -- Кнопка 2: Get Tinker
-    local btnTinker = Instance.new("TextButton")
-    local cornerTinker = Instance.new("UICorner")
-    btnTinker.Name = "GetTinkerButton"
-    btnTinker.Parent = MainFrame
-    btnTinker.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btnTinker.Size = UDim2.new(0, 185, 0, 40)
-    btnTinker.Font = Enum.Font.SourceSansBold
-    btnTinker.Text = "get tinker"
-    btnTinker.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btnTinker.TextSize = 16
-    cornerTinker.Parent = btnTinker
+    -- Кнопка Get Tinker
+    BtnTinker.Name = "GetTinkerButton"
+    BtnTinker.Parent = MainFrame
+    BtnTinker.BackgroundColor3 = Color3.fromRGB(38, 38, 44)
+    BtnTinker.Position = UDim2.new(0.05, 0, 0.50, 0)
+    BtnTinker.Size = UDim2.new(0.9, 0, 0, 50)
+    BtnTinker.Font = Enum.Font.SourceSansBold
+    BtnTinker.Text = "Get Tinker"
+    BtnTinker.TextColor3 = Color3.fromRGB(255, 255, 255)
+    BtnTinker.TextSize = 16
 
-    btnTinker.MouseButton1Click:Connect(function()
+    UICornerTinker.CornerRadius = UDim.new(0, 6)
+    UICornerTinker.Parent = BtnTinker
+
+    BtnTinker.MouseButton1Click:Connect(function()
         pcall(function()
             local char = lp.Character or lp.CharacterAdded:Wait()
             local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -610,20 +625,21 @@ elseif placeId == 14422118326 then
         end)
     end)
 
-    -- Кнопка 3: Get Rob Plushie
-    local btnPlushie = Instance.new("TextButton")
-    local cornerPlushie = Instance.new("UICorner")
-    btnPlushie.Name = "GetRobPlushieButton"
-    btnPlushie.Parent = MainFrame
-    btnPlushie.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-    btnPlushie.Size = UDim2.new(0, 185, 0, 40)
-    btnPlushie.Font = Enum.Font.SourceSansBold
-    btnPlushie.Text = "get rob plushie"
-    btnPlushie.TextColor3 = Color3.fromRGB(255, 255, 255)
-    btnPlushie.TextSize = 16
-    cornerPlushie.Parent = btnPlushie
+    -- Кнопка Get Rob Plushie
+    BtnPlushie.Name = "GetRobPlushieButton"
+    BtnPlushie.Parent = MainFrame
+    BtnPlushie.BackgroundColor3 = Color3.fromRGB(38, 38, 44)
+    BtnPlushie.Position = UDim2.new(0.05, 0, 0.76, 0)
+    BtnPlushie.Size = UDim2.new(0.9, 0, 0, 50)
+    BtnPlushie.Font = Enum.Font.SourceSansBold
+    BtnPlushie.Text = "Get Rob Plushie"
+    BtnPlushie.TextColor3 = Color3.fromRGB(255, 255, 255)
+    BtnPlushie.TextSize = 16
 
-    btnPlushie.MouseButton1Click:Connect(function()
+    UICornerPlushie.CornerRadius = UDim.new(0, 6)
+    UICornerPlushie.Parent = BtnPlushie
+
+    BtnPlushie.MouseButton1Click:Connect(function()
         pcall(function()
             local char = lp.Character or lp.CharacterAdded:Wait()
             local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -2360,7 +2376,7 @@ end
                         local stats = lp:FindFirstChild("leaderstats")
                         if stats and stats:FindFirstChild("Glove") and stats.Glove.Value ~= glove then
                             if lp.Character and not lp.Character:FindFirstChild("entered") then
-                                local g = Workspace.Lobby:FindFirstChild(glove)
+                                local g = Workspace.Lobby:FindFirstChild("Glove")
                                 if g and g:FindFirstChild("ClickDetector") then
                                     fireclickdetector(g.ClickDetector)
                                     task.wait(0.5)
