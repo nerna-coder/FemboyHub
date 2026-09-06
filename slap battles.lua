@@ -1,5 +1,3 @@
-if not game:IsLoaded() then game.Loaded:Wait() end
-
 local Rayfield
 local success, err = pcall(function()
     Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
@@ -465,6 +463,36 @@ local function runAutoGetFrostbite()
     game:GetService("TeleportService"):Teleport(17290438723)
 end
 
+-- Функция для новой кнопки Free Recall
+local function runFreeRecall()
+    local ReplicatedStorage = game:GetService("ReplicatedStorage")
+    local Players = game:GetService("Players")
+    local localPlayer = Players.LocalPlayer
+
+    local recallReset = ReplicatedStorage:WaitForChild("RecallReset")
+    local recallSteps = ReplicatedStorage:WaitForChild("RecallLastInteractionSteps")
+
+    local portal = workspace:WaitForChild("RepressedMemories"):WaitForChild("Portal")
+
+    task.spawn(function()
+        while true do
+            recallReset:FireServer(nil, true)
+            local success, result = pcall(function()
+                return recallSteps:InvokeServer(false)
+            end)
+            
+            if success and type(result) == "string" and result:lower() == "simon says walk through the portal to collect your reward" then
+                break
+            end
+            task.defer(task.wait)
+        end
+
+        local character = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+        local rootPart = character:WaitForChild("HumanoidRootPart")
+        rootPart:PivotTo(portal.CFrame)
+    end)
+end
+
 local Window
 
 if placeId == 122902713960550 then
@@ -537,9 +565,6 @@ elseif placeId == 17290438723 then
         runAutoGetFrostbite()
     end)
 
--- =============================================
--- НОВЫЙ ОТДЕЛЬНЫЙ GUI ДЛЯ ПЛЕЙС АЙДИ 14422118326
--- =============================================
 elseif placeId == 14422118326 then
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
@@ -2116,6 +2141,14 @@ else
         end
     })
 
+    -- Добавленная кнопка Free Recall в основной хаб
+    Tab1:CreateButton({
+        Name = "Free Recall",
+        Callback = function()
+            runFreeRecall()
+        end
+    })
+
     Tab1:CreateButton({
         Name = "Auto-Get camera (Nothing is needed)",
         Callback = function()
@@ -2183,9 +2216,6 @@ else
     Tab1:CreateButton({ Name = "Auto-Get bind", Callback = function() TeleportService:Teleport(74169485398268) end })
     Tab1:CreateButton({ Name = "Auto-Get suction", Callback = function() runSuctionCode() end })
 
-    -- =============================================
-    -- НОВЫЕ КНОПКИ ПЕРЧАТОК ДЛЯ ПЛЕЙС 14422118326
-    -- =============================================
     Tab1:CreateButton({
         Name = "Get Null Glove",
         Callback = function()
@@ -2361,204 +2391,8 @@ end)
                         until Humanoid.Sit == true
                     end
                     task.wait(0.8)
-                    local targetCloudCFrame = CFrame.new(196.48, 147.59, 88.80, 0.234, 0.000, 0.972, -0.000, 1.000, 0.000, -0.972, -0.000, 0.234)
-                    if cloudModel and cloudModel.PrimaryPart then cloudModel:PivotTo(targetCloudCFrame) end
-                    task.wait(1.5)
-                    Humanoid.Sit = false
-                    task.wait(0.1)
-                    ReplicatedStorage.GeneralAbility:FireServer()
-                    task.wait(0.7)
-                    local plate = Workspace:WaitForChild("Arena"):WaitForChild("Plate")
-                    for i = 1, 400 do
-                        HumanoidRootPart.CFrame = plate.CFrame * CFrame.new(0, 1.5, 0)
-                        task.wait(0.005)
-                    end
-                    Humanoid.Health = 0
+                    local targetCloudCFrame = CFrame.new(196.48, 147.59, 88.80, 0.234, 0.000, 0.972, -0.000, 1.000, 0.000, -0.972, -0.000, 0)
                 end)
-            end)
-        end
-    })
-
-    Tab1:CreateButton({
-        Name = "Auto-Get Conker",
-        Callback = function()
-            local s = [[
-if not game:IsLoaded() then game.Loaded:Wait() end
-task.wait(0.5)
-local workspace = game:GetService("Workspace")
-local ReplicatedStorage = game:GetService("ReplicatedStorage")
-local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
-ReplicatedStorage.Remotes.Dialogue.FinishedNPCDialogue:FireServer()
-task.wait(1)
-fireclickdetector(workspace.Map.Props.BasketCollection.Basket.ClickDetector)
-task.wait(7.5)
-while task.wait() do
-    hrp.CFrame = CFrame.new(36, 4, 1.5)
-    if workspace:FindFirstChild("Conker") then
-        firetouchinterest(hrp, workspace.Conker, 0)
-        firetouchinterest(hrp, workspace.Conker, 1)
-    end
-    ReplicatedStorage.Remotes.tool.use:FireServer("slap")
-    for i, v in ipairs(workspace.NPCs:GetChildren()) do
-        if v:FindFirstChild("HumanoidRootPart") then
-            ReplicatedStorage.Remotes.tool.hit:FireServer("slap", {["Instance"] = v.HumanoidRootPart})
-        end
-    end
-    fireproximityprompt(workspace.Map.CoreAssets.Bowl.ProximityPrompt)
-end
-]]
-            local qtp = queue_on_teleport or queueonteleport
-            if game.PlaceId == 101113181694564 then
-                loadstring(s)()
-            else
-                if qtp then 
-                    pcall(function() qtp(s) end)
-                end
-                TeleportService:Teleport(101113181694564, lp)
-            end
-        end
-    })
-
-    Tab1:CreateButton({
-        Name = "Auto-Get debug",
-        Callback = function()
-            task.spawn(function()
-                repeat task.wait() until game:IsLoaded()
-                local char = lp.Character or lp.CharacterAdded:Wait()
-                local hrp = char:WaitForChild("HumanoidRootPart")
-                hrp.CFrame = CFrame.new(-17948.535156, 59.828022, 3600.984863)
-                task.wait(0.5)
-                local room = workspace:FindFirstChild("Debug Room")
-                if room then
-                    local btns = room.Keypad.Buttons
-                    local function press(btn)
-                        if btn and btn:FindFirstChild("ClickDetector") then
-                            fireclickdetector(btn.ClickDetector)
-                            task.wait(0.1)
-                        end
-                    end
-                    press(btns[tostring(room.DuckTable.DuckTable.Duckies.Value)])
-                    press(btns[room.AdminGloves.GlovesCode.SurfaceGui.AdminNumber.Text])
-                    press(btns[room.Maze.MazePrize.SurfaceGui.MazeNumber.Text])
-                    press(btns["7"])
-                    press(btns.Enter)
-                end
-            end)
-        end
-    })
-
-    Tab1:CreateButton({ Name = "Plate", Callback = function() TeleportService:Teleport(106620300132058, lp) end })
-
-    Tab1:CreateButton({
-        Name = "Brazil Badge",
-        Callback = function()
-            local char = lp.Character
-            if char and char:FindFirstChild("HumanoidRootPart") then
-                char.HumanoidRootPart.CFrame = CFrame.new(-1119.05, 309.54, -5.09, 0.039, -0.000, 0.999, -0.000, 1.000, 0.000, -0.999, -0.000, 0.039)
-            end
-        end
-    })
-
-    Tab1:CreateButton({ Name = "Collector (Teleport)", Callback = function() TeleportService:Teleport(79885102123162, lp) end })
-    Tab1:CreateButton({ Name = "Auto UTG", Callback = function() TeleportService:Teleport(115782629143468, lp) end })
-
-    Tab1:CreateButton({
-        Name = "Auto-Get relude",
-        Callback = function()
-            local character = lp.Character or lp.CharacterAdded:Wait()
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                character.HumanoidRootPart.CFrame = CFrame.new(17942.72, -130.16, -3558.06, 0.998, -0.000, -0.057, 0.000, 1.000, -0.000, 0.057, 0.000, 0.998)
-            end
-        end
-    })
-
-    Tab1:CreateButton({
-        Name = "Auto-Get hunter",
-        Callback = function()
-            local character = lp.Character or lp.CharacterAdded:Wait()
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                character.HumanoidRootPart.CFrame = CFrame.new(17942.72, -130.16, -3558.06, 0.998, -0.000, -0.057, 0.000, 1.000, -0.000, 0.057, 0.000, 0.998)
-            end
-        end
-    })
-
-    Tab1:CreateButton({
-        Name = "Auto-Get avatar+relude",
-        Callback = function()
-            local character = lp.Character or lp.CharacterAdded:Wait()
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                character.HumanoidRootPart.CFrame = CFrame.new(17942.72, -130.16, -3558.06, 0.998, -0.000, -0.057, 0.000, 1.000, -0.000, 0.057, 0.000, 0.998)
-            end
-        end
-    })
-
-    Tab1:CreateButton({
-        Name = "Auto-Get avatar+hunters",
-        Callback = function()
-            local character = lp.Character or lp.CharacterAdded:Wait()
-            if character and character:FindFirstChild("HumanoidRootPart") then
-                character.HumanoidRootPart.CFrame = CFrame.new(17942.72, -130.16, -3558.06, 0.998, -0.000, -0.057, 0.000, 1.000, -0.000, 0.057, 0.000, 0.998)
-            end
-        end
-    })
-
-    Tab1:CreateButton({
-        Name = "Auto Slender",
-        Callback = function()
-            task.spawn(function()
-                if placeId == 6403373529 or placeId == 9015014224 then
-                    local function gethrp()
-                        local c = lp.Character or lp.CharacterAdded:Wait()
-                        return c:WaitForChild("HumanoidRootPart", 5)
-                    end
-                    local function equipGlove(glove)
-                        local stats = lp:FindFirstChild("leaderstats")
-                        if stats and stats:FindFirstChild("Glove") and stats.Glove.Value ~= glove then
-                            if lp.Character and not lp.Character:FindFirstChild("entered") then
-                                local g = Workspace.Lobby:FindFirstChild(glove)
-                                if g and g:FindFirstChild("ClickDetector") then
-                                    fireclickdetector(g.ClickDetector)
-                                    task.wait(0.5)
-                                end
-                            end
-                        end
-                    end
-                    local function reset()
-                        if lp.Character and lp.Character:FindFirstChild("Humanoid") then
-                            lp.Character.Humanoid.Health = 0
-                        end
-                        lp.CharacterAdded:Wait()
-                        task.wait(1)
-                    end
-                    equipGlove("Balloony")
-                    local root = gethrp()
-                    if root then root.CFrame = CFrame.new(-1210.02, 331.92, 3.47, 0.018, 0, 1, 0, 1, 0, -1, 0, 0.018) end
-                    local tape = Workspace:WaitForChild("TapeRecorder", 10)
-                    if tape and tape:FindFirstChild("Front") then
-                        root = gethrp()
-                        if root then root.CFrame = tape.Front.CFrame * CFrame.new(0, 0, -1) end
-                        task.wait(0.2)
-                        if tape.Front:FindFirstChild("ProximityPrompt") then fireproximityprompt(tape.Front.ProximityPrompt) end
-                        task.wait(0.15)
-                        local code = ""
-                        local rec = true
-                        local sfx = tape.Front:FindFirstChild("DigitsSFX")
-                        while rec do
-                            task.wait()
-                            if sfx then
-                                for i = 0, 9 do
-                                    local d = tostring(i)
-                                    local snd = sfx:FindFirstChild(d)
-                                    if snd and snd.Playing then
-                                        code = code .. d
-                                        task.wait(1)
-                                        break
-                                    end
-                                end
-                            end
-                        end
-                    end
-                end
             end)
         end
     })
