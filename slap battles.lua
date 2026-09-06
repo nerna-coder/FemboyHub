@@ -537,70 +537,135 @@ elseif placeId == 17290438723 then
         runAutoGetFrostbite()
     end)
 
--- НОВЫЙ ОТДЕЛЬНЫЙ GUI ДЛЯ ПЛЕЙСА 14422118326
+-- =============================================
+-- НОВЫЙ ОТДЕЛЬНЫЙ GUI ДЛЯ ПЛЕЙС АЙДИ 14422118326
+-- =============================================
 elseif placeId == 14422118326 then
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
     local UIListLayout = Instance.new("UIListLayout")
+    local UIPadding = Instance.new("UIPadding")
+    local Title = Instance.new("TextLabel")
+    local UICornerTitle = Instance.new("UICorner")
 
-    ScreenGui.Name = "FemboyHubCustomGui"
+    ScreenGui.Name = "GlovesGui"
     ScreenGui.Parent = game:GetService("CoreGui")
     ScreenGui.ResetOnSpawn = false
 
     MainFrame.Name = "MainFrame"
     MainFrame.Parent = ScreenGui
-    MainFrame.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    MainFrame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     MainFrame.Position = UDim2.new(0.05, 0, 0.1, 0)
-    MainFrame.Size = UDim2.new(0, 220, 0, 220)
+    MainFrame.Size = UDim2.new(0, 220, 0, 200)
+    MainFrame.Active = true
+    MainFrame.Draggable = true
 
+    UICorner.CornerRadius = UDim.new(0, 8)
     UICorner.Parent = MainFrame
 
-    UIListLayout.Parent = MainFrame
-    UIListLayout.HorizontalAlignment = Enum.HorizontalAlignment.Center
-    UIListLayout.VerticalAlignment = Enum.VerticalAlignment.Center
+    UIPadding.PaddingTop = UDim.new(0, 8)
+    UIPadding.PaddingBottom = UDim.new(0, 8)
+    UIPadding.PaddingLeft = UDim.new(0, 8)
+    UIPadding.PaddingRight = UDim.new(0, 8)
+    UIPadding.Parent = MainFrame
+
     UIListLayout.SortOrder = Enum.SortOrder.LayoutOrder
-    UIListLayout.Padding = UDim.new(0, 10)
+    UIListLayout.Padding = UDim.new(0, 6)
+    UIListLayout.Parent = MainFrame
 
-    local function createCustomButton(text, callback)
+    Title.Name = "Title"
+    Title.Parent = MainFrame
+    Title.BackgroundColor3 = Color3.fromRGB(35, 35, 35)
+    Title.Size = UDim2.new(1, 0, 0, 28)
+    Title.Font = Enum.Font.GothamBold
+    Title.Text = "Femboy Hub - Gloves"
+    Title.TextColor3 = Color3.fromRGB(255, 255, 255)
+    Title.TextSize = 14
+    Title.LayoutOrder = 0
+    UICornerTitle.CornerRadius = UDim.new(0, 6)
+    UICornerTitle.Parent = Title
+
+    local function makeButton(labelText, layoutOrder)
         local btn = Instance.new("TextButton")
-        local corner = Instance.new("UICorner")
-
+        local btnCorner = Instance.new("UICorner")
         btn.Parent = MainFrame
         btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
-        btn.Size = UDim2.new(0, 185, 0, 40)
-        btn.Font = Enum.Font.SourceSansBold
-        btn.Text = text
+        btn.Size = UDim2.new(1, 0, 0, 42)
+        btn.Font = Enum.Font.GothamSemibold
+        btn.Text = labelText
         btn.TextColor3 = Color3.fromRGB(255, 255, 255)
-        btn.TextSize = 16
+        btn.TextSize = 14
+        btn.LayoutOrder = layoutOrder
+        btnCorner.CornerRadius = UDim.new(0, 6)
+        btnCorner.Parent = btn
 
-        corner.Parent = btn
-
-        btn.MouseButton1Click:Connect(callback)
+        btn.MouseEnter:Connect(function()
+            btn.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+        end)
+        btn.MouseLeave:Connect(function()
+            btn.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+        end)
+        return btn
     end
 
-    createCustomButton("Get Null", function()
-        pcall(function()
+    local btnNull = makeButton("Get Null", 1)
+    local btnTinker = makeButton("Get Tinker", 2)
+    local btnRob = makeButton("Get Rob Plushie", 3)
+
+    local function tpAndInteract(targetCF)
+        task.spawn(function()
             local char = lp.Character or lp.CharacterAdded:Wait()
-            local hrp = char:WaitForChild("HumanoidRootPart")
-            hrp.CFrame = CFrame.new(5456.61, -189.00, 1853.98, -0.951, -0.000, 0.308, -0.000, 1.000, 0.000, -0.308, 0.000, -0.951)
+            local hrp = char:WaitForChild("HumanoidRootPart", 5)
+            if not hrp then return end
+            hrp.CFrame = targetCF
+            task.wait(0.6)
+            pcall(function()
+                for _, v in ipairs(workspace:GetDescendants()) do
+                    if v:IsA("ProximityPrompt") then
+                        local parent = v.Parent
+                        if parent and parent:IsA("BasePart") then
+                            if (parent.Position - hrp.Position).Magnitude < 25 then
+                                fireproximityprompt(v)
+                                task.wait(0.05)
+                            end
+                        end
+                    elseif v:IsA("ClickDetector") then
+                        local parent = v.Parent
+                        if parent and parent:IsA("BasePart") then
+                            if (parent.Position - hrp.Position).Magnitude < 25 then
+                                fireclickdetector(v)
+                                task.wait(0.05)
+                            end
+                        end
+                    end
+                end
+            end)
+            task.wait(0.2)
+            pcall(function()
+                for _, v in ipairs(workspace:GetDescendants()) do
+                    if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" then
+                        if (v.Position - hrp.Position).Magnitude < 12 then
+                            firetouchinterest(hrp, v, 0)
+                            task.wait(0.03)
+                            firetouchinterest(hrp, v, 1)
+                        end
+                    end
+                end
+            end)
         end)
+    end
+
+    btnNull.MouseButton1Click:Connect(function()
+        tpAndInteract(CFrame.new(5456.61, -189.00, 1853.98, -0.951, -0.000, 0.308, -0.000, 1.000, 0.000, -0.308, 0.000, -0.951))
     end)
 
-    createCustomButton("Get Tinker", function()
-        pcall(function()
-            local char = lp.Character or lp.CharacterAdded:Wait()
-            local hrp = char:WaitForChild("HumanoidRootPart")
-            hrp.CFrame = CFrame.new(4834.91, -214.00, 802.50, 0.052, 0.000, 0.999, -0.000, 1.000, -0.000, -0.999, -0.000, 0.052)
-        end)
+    btnTinker.MouseButton1Click:Connect(function()
+        tpAndInteract(CFrame.new(4834.91, -214.00, 802.50, 0.052, 0.000, 0.999, -0.000, 1.000, -0.000, -0.999, -0.000, 0.052))
     end)
 
-    createCustomButton("Get Rob Plushie", function()
-        pcall(function()
-            local char = lp.Character or lp.CharacterAdded:Wait()
-            local hrp = char:WaitForChild("HumanoidRootPart")
-            hrp.CFrame = CFrame.new(5260.08, -139.20, 864.11, -0.717, 0.000, -0.697, 0.000, 1.000, 0.000, 0.697, -0.000, -0.717)
-        end)
+    btnRob.MouseButton1Click:Connect(function()
+        tpAndInteract(CFrame.new(5260.08, -139.20, 864.11, -0.717, 0.000, -0.697, 0.000, 1.000, 0.000, 0.697, -0.000, -0.717))
     end)
 
 elseif placeId == 11828384869 then
@@ -2117,6 +2182,126 @@ else
 
     Tab1:CreateButton({ Name = "Auto-Get bind", Callback = function() TeleportService:Teleport(74169485398268) end })
     Tab1:CreateButton({ Name = "Auto-Get suction", Callback = function() runSuctionCode() end })
+
+    -- =============================================
+    -- НОВЫЕ КНОПКИ ПЕРЧАТОК ДЛЯ ПЛЕЙС 14422118326
+    -- =============================================
+    Tab1:CreateButton({
+        Name = "Get Null Glove",
+        Callback = function()
+            local qtp = queue_on_teleport or queueonteleport
+            local s = [[
+if not game:IsLoaded() then game.Loaded:Wait() end
+repeat task.wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+task.wait(1)
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+hrp.CFrame = CFrame.new(5456.61, -189.00, 1853.98, -0.951, -0.000, 0.308, -0.000, 1.000, 0.000, -0.308, 0.000, -0.951)
+task.wait(0.6)
+pcall(function()
+    for _, v in ipairs(game.Workspace:GetDescendants()) do
+        if v:IsA("ProximityPrompt") then
+            local p = v.Parent
+            if p and p:IsA("BasePart") and (p.Position - hrp.Position).Magnitude < 25 then
+                fireproximityprompt(v) task.wait(0.05)
+            end
+        elseif v:IsA("ClickDetector") then
+            local p = v.Parent
+            if p and p:IsA("BasePart") and (p.Position - hrp.Position).Magnitude < 25 then
+                fireclickdetector(v) task.wait(0.05)
+            end
+        end
+    end
+end)
+pcall(function()
+    for _, v in ipairs(game.Workspace:GetDescendants()) do
+        if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" and (v.Position - hrp.Position).Magnitude < 12 then
+            firetouchinterest(hrp, v, 0) task.wait(0.03) firetouchinterest(hrp, v, 1)
+        end
+    end
+end)
+]]
+            if qtp then pcall(function() qtp(s) end) end
+            TeleportService:Teleport(14422118326, lp)
+        end
+    })
+
+    Tab1:CreateButton({
+        Name = "Get Tinker Glove",
+        Callback = function()
+            local qtp = queue_on_teleport or queueonteleport
+            local s = [[
+if not game:IsLoaded() then game.Loaded:Wait() end
+repeat task.wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+task.wait(1)
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+hrp.CFrame = CFrame.new(4834.91, -214.00, 802.50, 0.052, 0.000, 0.999, -0.000, 1.000, -0.000, -0.999, -0.000, 0.052)
+task.wait(0.6)
+pcall(function()
+    for _, v in ipairs(game.Workspace:GetDescendants()) do
+        if v:IsA("ProximityPrompt") then
+            local p = v.Parent
+            if p and p:IsA("BasePart") and (p.Position - hrp.Position).Magnitude < 25 then
+                fireproximityprompt(v) task.wait(0.05)
+            end
+        elseif v:IsA("ClickDetector") then
+            local p = v.Parent
+            if p and p:IsA("BasePart") and (p.Position - hrp.Position).Magnitude < 25 then
+                fireclickdetector(v) task.wait(0.05)
+            end
+        end
+    end
+end)
+pcall(function()
+    for _, v in ipairs(game.Workspace:GetDescendants()) do
+        if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" and (v.Position - hrp.Position).Magnitude < 12 then
+            firetouchinterest(hrp, v, 0) task.wait(0.03) firetouchinterest(hrp, v, 1)
+        end
+    end
+end)
+]]
+            if qtp then pcall(function() qtp(s) end) end
+            TeleportService:Teleport(14422118326, lp)
+        end
+    })
+
+    Tab1:CreateButton({
+        Name = "Get Rob Plushie",
+        Callback = function()
+            local qtp = queue_on_teleport or queueonteleport
+            local s = [[
+if not game:IsLoaded() then game.Loaded:Wait() end
+repeat task.wait() until game.Players.LocalPlayer.Character and game.Players.LocalPlayer.Character:FindFirstChild("HumanoidRootPart")
+task.wait(1)
+local hrp = game.Players.LocalPlayer.Character.HumanoidRootPart
+hrp.CFrame = CFrame.new(5260.08, -139.20, 864.11, -0.717, 0.000, -0.697, 0.000, 1.000, 0.000, 0.697, -0.000, -0.717)
+task.wait(0.6)
+pcall(function()
+    for _, v in ipairs(game.Workspace:GetDescendants()) do
+        if v:IsA("ProximityPrompt") then
+            local p = v.Parent
+            if p and p:IsA("BasePart") and (p.Position - hrp.Position).Magnitude < 25 then
+                fireproximityprompt(v) task.wait(0.05)
+            end
+        elseif v:IsA("ClickDetector") then
+            local p = v.Parent
+            if p and p:IsA("BasePart") and (p.Position - hrp.Position).Magnitude < 25 then
+                fireclickdetector(v) task.wait(0.05)
+            end
+        end
+    end
+end)
+pcall(function()
+    for _, v in ipairs(game.Workspace:GetDescendants()) do
+        if v:IsA("BasePart") and v.Name ~= "HumanoidRootPart" and (v.Position - hrp.Position).Magnitude < 12 then
+            firetouchinterest(hrp, v, 0) task.wait(0.03) firetouchinterest(hrp, v, 1)
+        end
+    end
+end)
+]]
+            if qtp then pcall(function() qtp(s) end) end
+            TeleportService:Teleport(14422118326, lp)
+        end
+    })
 
     Tab1:CreateButton({
         Name = "Auto-Get lag",
