@@ -1,13 +1,47 @@
 --This code was created by nerna or zemboxo sx and silentabsolutedayn. Anyway, blah blah, join our Discord server
-local Rayfield
+-- Step 1: Bypass Anti-Cheat
+local startmessage = Instance.new("ScreenGui")
+startmessage.Name = "LoadingGui"
+startmessage.ResetOnSpawn = false
+startmessage.Parent = game:GetService("CoreGui")
+
+local bg = Instance.new("Frame")
+bg.Size = UDim2.new(1, 0, 1, 0)
+bg.BackgroundColor3 = Color3.fromRGB(10, 10, 10)
+bg.BorderSizePixel = 0
+bg.Parent = startmessage
+
+local msgLabel = Instance.new("TextLabel")
+msgLabel.Size = UDim2.new(1, 0, 0, 50)
+msgLabel.Position = UDim2.new(0, 0, 0.5, -25)
+msgLabel.BackgroundTransparency = 1
+msgLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+msgLabel.TextScaled = true
+msgLabel.Font = Enum.Font.GothamBold
+msgLabel.Text = "Bypassing Anti-Cheat..."
+msgLabel.Parent = bg
+
+msgLabel.Text = "Bypassing Anti-Cheat by nexer...."
+if game.PlaceId==101960002094215 or game.PlaceId==9431156611 then
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NewNexer/NexerHub/refs/heads/main/SB/Modules/CleanClientAntiCheat.luau"))("Slap Royale")
+else
+    loadstring(game:HttpGet("https://raw.githubusercontent.com/NewNexer/NexerHub/refs/heads/main/SB/Modules/CleanClientAntiCheat.luau"))("Slap Battles")
+end
+
+
+msgLabel.Text = "Loading Wind UI..."
+local WindUI
 local success, err = pcall(function()
-    Rayfield = loadstring(game:HttpGet('https://sirius.menu/rayfield'))()
+    WindUI = loadstring(game:HttpGet("https://raw.githubusercontent.com/Footagesus/WindUI/main/dist/main.lua"))()
 end)
 
-if not success or not Rayfield then
-    warn("error Rayfield UI: " .. tostring(err))
+if not success or not WindUI then
+    warn("error WindUI: " .. tostring(err))
+    startmessage:Destroy()
     return
 end
+
+startmessage:Destroy()
 
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -1007,15 +1041,13 @@ elseif placeId == 14422118326 then
     end)
 
 elseif placeId == 11828384869 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Counter & Elude",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Counter & Elude",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Badges", 4483345998)
-    Tab:CreateButton({
-        Name = "Counter + Elude",
+    local Tab = Window:Tab({Title = "Badges"})
+    Tab:Button({
+        Title = "Counter + Elude",
         Callback = function()
             task.spawn(function()
                 local player = game.Players.LocalPlayer
@@ -1050,8 +1082,8 @@ elseif placeId == 11828384869 then
             end)
         end
     })
-    Tab:CreateButton({
-        Name = "Get Alchemist Plushie",
+    Tab:Button({
+        Title = "Get Alchemist Plushie",
         Callback = function()
             for i, v in next, workspace:GetDescendants() do
                 if v:IsA("ClickDetector") then fireclickdetector(v) end
@@ -1060,16 +1092,14 @@ elseif placeId == 11828384869 then
     })
 
 elseif placeId == 18550498098 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Place 18550498098",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Place 18550498098",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Auto-Get scripts", 4483345998)
+    local Tab = Window:Tab({Title = "Auto-Get scripts"})
 
-    Tab:CreateButton({
-        Name = "Avatar + Relude",
+    Tab:Button({
+        Title = "Avatar + Relude",
         Callback = function()
             local plrs = game:GetService("Players")
             local storage = game:GetService("ReplicatedStorage")
@@ -1161,8 +1191,8 @@ elseif placeId == 18550498098 then
         end
     })
 
-    Tab:CreateButton({
-        Name = "Avatar + Hunters",
+    Tab:Button({
+        Title = "Avatar + Hunters",
         Callback = function()
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -1245,8 +1275,8 @@ elseif placeId == 18550498098 then
         end
     })
 
-    Tab:CreateButton({
-        Name = "Relude",
+    Tab:Button({
+        Title = "Relude",
         Callback = function()
             local plrs = game:GetService("Players")
             local storage = game:GetService("ReplicatedStorage")
@@ -1345,8 +1375,8 @@ elseif placeId == 18550498098 then
         end
     })
 
-    Tab:CreateButton({
-        Name = "Hunters",
+    Tab:Button({
+        Title = "Hunters",
         Callback = function()
             local Players = game:GetService("Players")
             local LocalPlayer = Players.LocalPlayer
@@ -1437,15 +1467,13 @@ elseif placeId == 18550498098 then
     })
 
 elseif placeId == 128229958211947 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Shellbert",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Shellbert",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Shellbert", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get Shellbert",
+    local Tab = Window:Tab({Title = "Shellbert"})
+    Tab:Button({
+        Title = "Auto-Get Shellbert",
         Callback = function()
             local char = lp.Character or lp.CharacterAdded:Wait()
             local HumanoidRootPart = char:WaitForChild("HumanoidRootPart", 5)
@@ -1480,28 +1508,24 @@ elseif placeId == 128229958211947 then
     })
 
 elseif placeId == 89837553336708 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Suction",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Suction",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Suction", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get suction",
+    local Tab = Window:Tab({Title = "Suction"})
+    Tab:Button({
+        Title = "Auto-Get suction",
         Callback = function() runSuctionCode() end
     })
 
 elseif placeId == 74169485398268 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Bind",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Bind",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Bind", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get bind",
+    local Tab = Window:Tab({Title = "Bind"})
+    Tab:Button({
+        Title = "Auto-Get bind",
         Callback = function()
             task.spawn(function()
                 local orb = workspace:FindFirstChild("Orb")
@@ -1516,15 +1540,13 @@ elseif placeId == 74169485398268 then
     })
 
 elseif placeId == 129665246576996 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Eggler",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Eggler",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Eggler", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get eggler",
+    local Tab = Window:Tab({Title = "Eggler"})
+    Tab:Button({
+        Title = "Auto-Get eggler",
         Callback = function()
             local char = lp.Character or lp.CharacterAdded:Wait()
             local folder = workspace:FindFirstChild("TrialCompletedPoints")
@@ -1539,8 +1561,8 @@ elseif placeId == 129665246576996 then
             end
         end
     })
-    Tab:CreateButton({
-        Name = "Auto-Get Shellbert",
+    Tab:Button({
+        Title = "Auto-Get Shellbert",
         Callback = function()
             local tpdata = (queue_on_teleport or queueonteleport)
             local code = [[
@@ -1588,15 +1610,13 @@ elseif placeId == 129665246576996 then
     })
 
 elseif placeId == 106620300132058 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Plate ID",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Plate ID",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Plate", 4483345998)
-    Tab:CreateButton({
-        Name = "Plate",
+    local Tab = Window:Tab({Title = "Plate"})
+    Tab:Button({
+        Title = "Plate",
         Callback = function()
             local RED_COLOR = Color3.fromRGB(255, 0, 0)
             local function cleanAndNoclip()
@@ -1614,15 +1634,13 @@ elseif placeId == 106620300132058 then
     })
 
 elseif placeId == 97220865182663 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Rat Place",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Rat Place",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Rats", 4483345998)
-    Tab:CreateButton({
-        Name = "Instail kills rat",
+    local Tab = Window:Tab({Title = "Rats"})
+    Tab:Button({
+        Title = "Instail kills rat",
         Callback = function()
             _G.KillRatsInstantly = true
             task.spawn(function()
@@ -1639,8 +1657,8 @@ elseif placeId == 97220865182663 then
             end)
         end
     })
-    Tab:CreateButton({
-        Name = "auto Master Whiskers Potion",
+    Tab:Button({
+        Title = "auto Master Whiskers Potion",
         Callback = function()
             _G.AutoPotion = true
             task.spawn(function()
@@ -1653,15 +1671,13 @@ elseif placeId == 97220865182663 then
     })
 
 elseif placeId == 113228834069218 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Penguin / Fish",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Penguin / Fish",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Quest", 4483345998)
-    Tab:CreateButton({
-        Name = "collect all fish",
+    local Tab = Window:Tab({Title = "Quest"})
+    Tab:Button({
+        Title = "collect all fish",
         Callback = function()
             local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
             for i, v in workspace.Fih:GetChildren() do
@@ -1676,32 +1692,28 @@ elseif placeId == 113228834069218 then
     })
 
 elseif placeId == 86643839793301 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Quests",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Quests",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Quests", 4483345998)
-    Tab:CreateButton({
-        Name = "Teleport to Alex's quest",
+    local Tab = Window:Tab({Title = "Quests"})
+    Tab:Button({
+        Title = "Teleport to Alex's quest",
         Callback = function() game:GetService("TeleportService"):Teleport(95356852680586) end
     })
-    Tab:CreateButton({
-        Name = "Teleport to Sam quest",
+    Tab:Button({
+        Title = "Teleport to Sam quest",
         Callback = function() game:GetService("TeleportService"):Teleport(113228834069218) end
     })
 
 elseif placeId == 95356852680586 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Snowman",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Snowman",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Snowman", 4483345998)
-    Tab:CreateButton({
-        Name = "Build a snowman",
+    local Tab = Window:Tab({Title = "Snowman"})
+    Tab:Button({
+        Title = "Build a snowman",
         Callback = function()
             local lp = game:GetService("Players").LocalPlayer
             local char = lp.Character
@@ -1726,15 +1738,13 @@ elseif placeId == 95356852680586 then
     })
 
 elseif placeId == 7234087065 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - ID 7234087065",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - ID 7234087065",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Fan & Riftshot", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get Fan",
+    local Tab = Window:Tab({Title = "Fan & Riftshot"})
+    Tab:Button({
+        Title = "Auto-Get Fan",
         Callback = function()
             local character = lp.Character or lp.CharacterAdded:Wait()
             local HumanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
@@ -1762,8 +1772,8 @@ elseif placeId == 7234087065 then
             end
         end
     })
-    Tab:CreateButton({
-        Name = "Auto-Get Riftshot",
+    Tab:Button({
+        Title = "Auto-Get Riftshot",
         Callback = function()
             pcall(function()
                 if lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
@@ -1781,8 +1791,8 @@ elseif placeId == 7234087065 then
             end)
         end
     })
-    Tab:CreateButton({
-        Name = "Auto Boxing Gloves",
+    Tab:Button({
+        Title = "Auto Boxing Gloves",
         Callback = function()
             local targetCFrame = CFrame.new(4231.91, 3505.89, 269.59, 0.993, -0.000, 0.120, 0.000, 1.000, 0.000, -0.120, -0.000, 0.993)
             local character = lp.Character or lp.CharacterAdded:Wait()
@@ -1793,8 +1803,8 @@ elseif placeId == 7234087065 then
             end
         end
     })
-    Tab:CreateButton({
-        Name = "Auto-Get UTG",
+    Tab:Button({
+        Title = "Auto-Get UTG",
         Callback = function()
             local targetCFrame = CFrame.new(-1233.92, 9900.16, 704.24, 0.936, -0.000, -0.352, 0.000, 1.000, 0.000, 0.352, -0.000, 0.936)
             if placeId == 115782629143468 then
@@ -1805,8 +1815,8 @@ elseif placeId == 7234087065 then
             end
         end
     })
-    Tab:CreateButton({
-        Name = "Auto-Get Clock",
+    Tab:Button({
+        Title = "Auto-Get Clock",
         Callback = function()
             local character = lp.Character or lp.CharacterAdded:Wait()
             local HumanoidRootPart = character:WaitForChild("HumanoidRootPart", 5)
@@ -1826,8 +1836,8 @@ elseif placeId == 7234087065 then
             end
         end
     })
-    Tab:CreateButton({
-        Name = "Auto-Get Metaverse",
+    Tab:Button({
+        Title = "Auto-Get Metaverse",
         Callback = function()
             local p = game:GetService("Players").LocalPlayer
             local c = p.Character or p.CharacterAdded:Wait()
@@ -1900,15 +1910,13 @@ elseif placeId == 7234087065 then
     })
 
 elseif placeId == 136005148166028 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Metaverse ID",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Metaverse ID",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Metaverse", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get Metaverse",
+    local Tab = Window:Tab({Title = "Metaverse"})
+    Tab:Button({
+        Title = "Auto-Get Metaverse",
         Callback = function()
             local p = game:GetService("Players").LocalPlayer
             local c = p.Character or p.CharacterAdded:Wait()
@@ -1981,15 +1989,13 @@ elseif placeId == 136005148166028 then
     })
 
 elseif placeId == 115782629143468 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - UTG ID",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - UTG ID",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("UTG", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get UTG",
+    local Tab = Window:Tab({Title = "UTG"})
+    Tab:Button({
+        Title = "Auto-Get UTG",
         Callback = function()
             local targetCFrame = CFrame.new(-1233.92, 9900.16, 704.24, 0.936, -0.000, -0.352, 0.000, 1.000, 0.000, 0.352, -0.000, 0.936)
             local character = lp.Character or lp.CharacterAdded:Wait()
@@ -1998,15 +2004,13 @@ elseif placeId == 115782629143468 then
     })
 
 elseif placeId == 118650724506449 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Snowroller",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Snowroller",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Snowroller", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get snowroller",
+    local Tab = Window:Tab({Title = "Snowroller"})
+    Tab:Button({
+        Title = "Auto-Get snowroller",
         Callback = function()
             local character = lp.Character or lp.CharacterAdded:Wait()
             local hrp = character:WaitForChild("HumanoidRootPart")
@@ -2015,15 +2019,13 @@ elseif placeId == 118650724506449 then
     })
 
 elseif placeId == 79885102123162 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Collector", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get Collector",
+    local Tab = Window:Tab({Title = "Collector"})
+    Tab:Button({
+        Title = "Auto-Get Collector",
         Callback = function()
             task.spawn(function()
                 local function touch(part)
@@ -2082,15 +2084,13 @@ elseif placeId == 79885102123162 then
     })
 
 elseif placeId == 132277598079047 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Slender", 4483345998)
-    Tab:CreateButton({
-        Name = "Collection Pages",
+    local Tab = Window:Tab({Title = "Slender"})
+    Tab:Button({
+        Title = "Collection Pages",
         Callback = function()
             task.spawn(function()
                 local folder = Workspace:WaitForChild("Pages", 10)
@@ -2113,79 +2113,62 @@ elseif placeId == 132277598079047 then
     })
 
 elseif placeId == 101113181694564 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Conker",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Conker",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Conker", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get conker",
+    local Tab = Window:Tab({Title = "Conker"})
+    Tab:Button({
+        Title = "Auto-Get conker",
         Callback = function()
             runAutoGetConkerNew()
         end
     })
 
 elseif placeId == 125845699717230 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Doorkeeper",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Doorkeeper",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Doorkeeper", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get doorkeeper",
+    local Tab = Window:Tab({Title = "Doorkeeper"})
+    Tab:Button({
+        Title = "Auto-Get doorkeeper",
         Callback = function()
             task.spawn(function()
-                while true do
-                    for _, prompt in ipairs(workspace:GetDescendants()) do
-                        if prompt:IsA("ProximityPrompt") then pcall(function() fireproximityprompt(prompt) end) end
-                    end
-                    for _, obj in ipairs(workspace:GetDescendants()) do
-                        if obj:IsA("ClickDetector") then
-                            pcall(function() fireclickdetector(obj) end)
-                        elseif obj.Name == "Hitbox" and obj:IsA("BasePart") then
+                while task.wait(0.1) do
+                    for _, v in ipairs(workspace:GetDescendants()) do
+                        if v.Name == "ClickDetector" then
                             pcall(function()
-                                if firetouchinterest and lp.Character and lp.Character:FindFirstChild("HumanoidRootPart") then
-                                    firetouchinterest(lp.Character.HumanoidRootPart, obj, 0)
-                                    firetouchinterest(lp.Character.HumanoidRootPart, obj, 1)
-                                end
+                                fireclickdetector(v)
                             end)
                         end
                     end
-                    task.wait(0.05)
                 end
             end)
         end
     })
 
 elseif placeId == 93981091811742 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Lotus",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Lotus",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("Lotus", 4483345998)
-    Tab:CreateButton({
-        Name = "Get lotus",
+    local Tab = Window:Tab({Title = "Lotus"})
+    Tab:Button({
+        Title = "Get lotus",
         Callback = function()
             runAutoGetLotus()
         end
     })
 
 elseif placeId == 77283826005207 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - G-X ID",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - G-X ID",
         ConfigurationSaving = { Enabled = false }
     })
-    local Tab = Window:CreateTab("G-X", 4483345998)
-    Tab:CreateButton({
-        Name = "Auto-Get G-X",
+    local Tab = Window:Tab({Title = "G-X"})
+    Tab:Button({
+        Title = "Auto-Get G-X",
         Callback = function()
             local localPlayer = Players.LocalPlayer
             local function touchPart(part)
@@ -2233,20 +2216,18 @@ elseif placeId == 77283826005207 then
     })
 
 elseif placeId == 13833961666 then
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - The Eternal Bob",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - The Eternal Bob",
         ConfigurationSaving = { Enabled = false }
     })
     _G.AutoSlapBobBoss = false
     _G.AutoTycoon = false
     _G.SlapBobClone = false
     local GloveSlap = "Tycoon"
-    local TabAuto = Window:CreateTab("Auto Scripts", 4483345998)
-    TabAuto:CreateToggle({
-        Name = "Auto Slap BobBoss",
-        CurrentValue = false,
+    local TabAuto = Window:Tab({Title = "Auto Scripts"})
+    TabAuto:Toggle({
+        Title = "Auto Slap BobBoss",
+        Value = false,
         Flag = "AutoSlapBobBoss",
         Callback = function(Value)
             _G.AutoSlapBobBoss = Value
@@ -2263,9 +2244,9 @@ elseif placeId == 13833961666 then
             end
         end
     })
-    TabAuto:CreateToggle({
-        Name = "Auto Click Tycoon",
-        CurrentValue = false,
+    TabAuto:Toggle({
+        Title = "Auto Click Tycoon",
+        Value = false,
         Flag = "AutoTycoon",
         Callback = function(Value)
             _G.AutoTycoon = Value
@@ -2286,9 +2267,9 @@ elseif placeId == 13833961666 then
             end
         end
     })
-    TabAuto:CreateToggle({
-        Name = "Slap Bob Clone",
-        CurrentValue = false,
+    TabAuto:Toggle({
+        Title = "Slap Bob Clone",
+        Value = false,
         Flag = "SlapBobClone",
         Callback = function(Value)
             _G.SlapBobClone = Value
@@ -2317,17 +2298,16 @@ elseif placeId == 13833961666 then
             end
         end
     })
-    TabAuto:CreateDropdown({
-        Name = "Glove for Slap Bob Clone",
-        Options = {"Tycoon", "Killstreak", "Reaper", "God's Hand"},
-        CurrentOption = {"Tycoon"},
-        MultipleOptions = false,
-        Flag = "GloveSlapDropdown",
+    TabAuto:Dropdown({
+        Title = "Glove for Slap Bob Clone",
+        Values = {"Tycoon", "Killstreak", "Reaper", "God's Hand"},
+        Default = Tycoon,
+                Flag = "GloveSlapDropdown",
         Callback = function(Selected)
             GloveSlap = Selected[1] or Selected
         end
     })
-    local TabTp = Window:CreateTab("Teleport", 4483345998)
+    local TabTp = Window:Tab({Title = "Teleport"})
     local TeleportLocations = {
         {Name = "Arena",          CF = CFrame.new(0,    5,  0)},
         {Name = "Lobby",          CF = CFrame.new(0,    5,  100)},
@@ -2338,8 +2318,8 @@ elseif placeId == 13833961666 then
     }
     for _, loc in ipairs(TeleportLocations) do
         local locCF = loc.CF
-        TabTp:CreateButton({
-            Name = loc.Name,
+        TabTp:Button({
+            Title = loc.Name,
             Callback = function()
                 local char = lp.Character or lp.CharacterAdded:Wait()
                 local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -2458,21 +2438,19 @@ elseif placeId == 80420091630966 then
         end
     end)
 
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub - Boss Mortis",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Boss Mortis",
         ConfigurationSaving = { Enabled = false }
     })
 
-    local TabRound = Window:CreateTab("Rounds", 4483345998)
-    local TabBoss = Window:CreateTab("Boss", 4483345998)
+    local TabRound = Window:Tab({Title = "Rounds"})
+    local TabBoss = Window:Tab({Title = "Boss"})
 
-    TabRound:CreateSection("Round 1")
+    TabRound:Section({Title = "Round 1"})
 
-    TabRound:CreateToggle({
-        Name = "Auto Slap Snoob",
-        CurrentValue = false,
+    TabRound:Toggle({
+        Title = "Auto Slap Snoob",
+        Value = false,
         Flag = "MortisAutoSlapSnoob",
         Callback = function(Value)
             _G.AutoSlapMortis = Value
@@ -2495,8 +2473,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateButton({
-        Name = "Get Key",
+    TabRound:Button({
+        Title = "Get Key",
         Callback = function()
             task.spawn(function()
                 for _, v in pairs(workspace:GetChildren()) do
@@ -2518,8 +2496,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateButton({
-        Name = "Teleport Portal",
+    TabRound:Button({
+        Title = "Teleport Portal",
         Callback = function()
             local char = lp.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
@@ -2531,10 +2509,10 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateSection("Round 2")
+    TabRound:Section({Title = "Round 2"})
 
-    TabRound:CreateButton({
-        Name = "Fix Elevator",
+    TabRound:Button({
+        Title = "Fix Elevator",
         Callback = function()
             task.spawn(function()
                 local char = lp.Character
@@ -2555,7 +2533,7 @@ elseif placeId == 80420091630966 then
                     char.HumanoidRootPart.CFrame = clickable.boltClick.CFrame
                 end
 
-                Rayfield:Notify({
+                WindUI:Notify({
                     Title = "Fix Elevator",
                     Content = "Teleported to bolt — click to fix!",
                     Duration = 5
@@ -2564,8 +2542,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateButton({
-        Name = "Teleport Eli Vator",
+    TabRound:Button({
+        Title = "Teleport Eli Vator",
         Callback = function()
             local char = lp.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
@@ -2580,10 +2558,10 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateSection("Round 3")
+    TabRound:Section({Title = "Round 3"})
 
-    TabRound:CreateButton({
-        Name = "Teleport Hammer Big",
+    TabRound:Button({
+        Title = "Teleport Hammer Big",
         Callback = function()
             local char = lp.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
@@ -2607,8 +2585,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateButton({
-        Name = "Teleport Hook",
+    TabRound:Button({
+        Title = "Teleport Hook",
         Callback = function()
             local char = lp.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
@@ -2636,8 +2614,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateButton({
-        Name = "Teleport Glasses",
+    TabRound:Button({
+        Title = "Teleport Glasses",
         Callback = function()
             local char = lp.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
@@ -2649,8 +2627,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabRound:CreateButton({
-        Name = "Grappler",
+    TabRound:Button({
+        Title = "Grappler",
         Callback = function()
             local char = lp.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
@@ -2681,11 +2659,11 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateSection("Boss Dice")
+    TabBoss:Section({Title = "Boss Dice"})
 
-    TabBoss:CreateToggle({
-        Name = "Anti Glare Wire",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "Anti Glare Wire",
+        Value = false,
         Flag = "MortisAntiGlare",
         Callback = function(Value)
             _G.AntiGlare = Value
@@ -2703,9 +2681,9 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateToggle({
-        Name = "Anti Touch Head",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "Anti Touch Head",
+        Value = false,
         Flag = "MortisAntiHead",
         Callback = function(Value)
             _G.AntiHead = Value
@@ -2725,9 +2703,9 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateToggle({
-        Name = "Auto Slap Left Hand",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "Auto Slap Left Hand",
+        Value = false,
         Flag = "MortisAutoSlapLeft",
         Callback = function(Value)
             _G.AutoSlap = Value
@@ -2749,7 +2727,7 @@ elseif placeId == 80420091630966 then
             end)
             if Value and not NotificationUnSh then
                 NotificationUnSh = true
-                Rayfield:Notify({
+                WindUI:Notify({
                     Title = "Auto Slap Left Hand",
                     Content = "Turn off Shiftlock, stand still, and dodge the attack hand!",
                     Duration = 10
@@ -2758,9 +2736,9 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateToggle({
-        Name = "Auto Slap Nail",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "Auto Slap Nail",
+        Value = false,
         Flag = "MortisNailSlap",
         Callback = function(Value)
             _G.NailSlap = Value
@@ -2824,8 +2802,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateButton({
-        Name = "PickUp C4",
+    TabBoss:Button({
+        Title = "PickUp C4",
         Callback = function()
             task.spawn(function()
                 local char = lp.Character
@@ -2849,8 +2827,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateButton({
-        Name = "Install C4",
+    TabBoss:Button({
+        Title = "Install C4",
         Callback = function()
             task.spawn(function()
                 local char = lp.Character
@@ -2882,8 +2860,8 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateButton({
-        Name = "Pickup Bomb",
+    TabBoss:Button({
+        Title = "Pickup Bomb",
         Callback = function()
             local char = lp.Character
             if char and char:FindFirstChild("HumanoidRootPart") then
@@ -2898,11 +2876,11 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateSection("Misc")
+    TabBoss:Section({Title = "Misc"})
 
-    TabBoss:CreateToggle({
-        Name = "No Cooldown Proximity",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "No Cooldown Proximity",
+        Value = false,
         Flag = "MortisNoCooldownProx",
         Callback = function(Value)
             _G.NoCooldownProximity = Value
@@ -2925,28 +2903,27 @@ elseif placeId == 80420091630966 then
         end
     })
 
-    TabBoss:CreateInput({
-        Name = "Fly Speed",
+    TabBoss:Input({
+        Title = "Fly Speed",
         Default = "50",
-        Numeric = true,
-        Placeholder = "Enter fly speed...",
+                Placeholder = "Enter fly speed...",
         Callback = function(Value)
             _G.SetSpeedFly = tonumber(Value) or 50
         end
     })
 
-    TabBoss:CreateToggle({
-        Name = "Start Fly  [R to toggle]",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "Start Fly  [R to toggle]",
+        Value = false,
         Flag = "MortisStartFly",
         Callback = function(Value)
             Fly(Value)
         end
     })
 
-    TabBoss:CreateToggle({
-        Name = "Full Bright",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "Full Bright",
+        Value = false,
         Flag = "MortisFullBright",
         Callback = function(Value)
             _G.FullBright = Value
@@ -2978,9 +2955,9 @@ elseif placeId == 80420091630966 then
         end)
     end
 
-    TabBoss:CreateToggle({
-        Name = "No Fog",
-        CurrentValue = false,
+    TabBoss:Toggle({
+        Title = "No Fog",
+        Value = false,
         Flag = "MortisNoFog",
         Callback = function(Value)
             _G.MortisNoFog = Value
@@ -3005,10 +2982,8 @@ elseif placeId == 80420091630966 then
     })
 
 else
-    Window = Rayfield:CreateWindow({
-        Name = "Femboy Hub",
-        LoadingTitle = "Femboy Hub",
-        LoadingSubtitle = "by silentabsolutedayn",
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub",
         ConfigurationSaving = { Enabled = true, FolderName = "FemboyHubConfig", FileName = "Config" }
     })
 
@@ -3035,56 +3010,56 @@ else
         TeleportService:Teleport(placeId, lp)
     end
 
-    local Tab1 = Window:CreateTab("Slap Battles Badges", 4483345998)
+    local Tab1 = Window:Tab({Title = "Slap Battles Badges"})
 
-    Tab1:CreateButton({
-        Name = "Auto-Get Alchemist",
+    Tab1:Button({
+        Title = "Auto-Get Alchemist",
         Callback = function()
             runAutoGetAlchemist()
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get sand",
+    Tab1:Button({
+        Title = "Auto-Get sand",
         Callback = function()
             runAutoGetSand()
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get frostbite",
+    Tab1:Button({
+        Title = "Auto-Get frostbite",
         Callback = function()
             runAutoGetFrostbite()
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Free Recall",
+    Tab1:Button({
+        Title = "Free Recall",
         Callback = function()
             runFreeRecall()
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get camera (Nothing is needed)",
+    Tab1:Button({
+        Title = "Auto-Get camera (Nothing is needed)",
         Callback = function()
             runAutoGetCamera()
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get conker",
+    Tab1:Button({
+        Title = "Auto-Get conker",
         Callback = function()
             runAutoGetConkerNew()
         end
     })
 
-    Tab1:CreateButton({ Name = "Auto-Get G-X", Callback = function() TeleportService:Teleport(77283826005207) end })
-    Tab1:CreateButton({ Name = "Auto-Get Counter + Elude", Callback = function() TeleportService:Teleport(11828384869, lp) end })
-    Tab1:CreateButton({ Name = "Auto-Get penguin", Callback = function() TeleportService:Teleport(113228834069218) end })
+    Tab1:Button({ Title = "Auto-Get G-X", Callback = function() TeleportService:Teleport(77283826005207) end })
+    Tab1:Button({ Title = "Auto-Get Counter + Elude", Callback = function() TeleportService:Teleport(11828384869, lp) end })
+    Tab1:Button({ Title = "Auto-Get penguin", Callback = function() TeleportService:Teleport(113228834069218) end })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get mouse (request el gato)",
+    Tab1:Button({
+        Title = "Auto-Get mouse (request el gato)",
         Callback = function()
             pcall(function()
                 local equip = debug.getupvalues(require(game.ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
@@ -3095,8 +3070,8 @@ else
         end
     })
 
-    Tab1:CreateButton({
-        Name = "[REDACTED] ( Requires 5000 Slaps)",
+    Tab1:Button({
+        Title = "[REDACTED] ( Requires 5000 Slaps)",
         Callback = function()
             task.spawn(function()
                 local player = game.Players.LocalPlayer
@@ -3126,8 +3101,8 @@ else
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get Link",
+    Tab1:Button({
+        Title = "Auto-Get Link",
         Callback = function()
             pcall(function()
                 local equip = debug.getupvalues(require(game.ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
@@ -3136,11 +3111,11 @@ else
         end
     })
 
-    Tab1:CreateButton({ Name = "Auto-Get bind", Callback = function() TeleportService:Teleport(74169485398268) end })
-    Tab1:CreateButton({ Name = "Auto-Get suction", Callback = function() runSuctionCode() end })
+    Tab1:Button({ Title = "Auto-Get bind", Callback = function() TeleportService:Teleport(74169485398268) end })
+    Tab1:Button({ Title = "Auto-Get suction", Callback = function() runSuctionCode() end })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get lag",
+    Tab1:Button({
+        Title = "Auto-Get lag",
         Callback = function()
             pcall(function()
                 if ReplicatedStorage:FindFirstChild("Events") and ReplicatedStorage.Events:FindFirstChild("celestial") then
@@ -3150,8 +3125,8 @@ else
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get the schlob",
+    Tab1:Button({
+        Title = "Auto-Get the schlob",
         Callback = function()
             task.spawn(function()
                 pcall(function()
@@ -3203,8 +3178,8 @@ else
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get voodoo",
+    Tab1:Button({
+        Title = "Auto-Get voodoo",
         Callback = function()
             task.spawn(function()
                 pcall(function()
@@ -3218,8 +3193,8 @@ else
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get fish",
+    Tab1:Button({
+        Title = "Auto-Get fish",
         Callback = function()
             task.spawn(function()
                 pcall(function()
@@ -3265,22 +3240,22 @@ else
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get lotus",
+    Tab1:Button({
+        Title = "Auto-Get lotus",
         Callback = function()
             runAutoGetLotus()
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get Tycoon",
+    Tab1:Button({
+        Title = "Auto-Get Tycoon",
         Callback = function()
             runAutoGetTycoon()
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Teleport Brazil",
+    Tab1:Button({
+        Title = "Teleport Brazil",
         Callback = function()
             local char = lp.Character or lp.CharacterAdded:Wait()
             local hrp = char:FindFirstChild("HumanoidRootPart")
@@ -3291,9 +3266,8 @@ else
         end
     })
 
-    -- ── AUTO-GET PLANK (НОВАЯ КНОПКА) ──────────────────────────
-    Tab1:CreateButton({
-        Name = "Auto-Get Plank",
+    Tab1:Button({
+        Title = "Auto-Get Plank",
         Callback = function()
             task.spawn(function()
                 local Players = game:GetService("Players")
@@ -3342,11 +3316,9 @@ else
             end)
         end
     })
-    -- ────────────────────────────────────────────────────────────
 
-    -- ── AUTO-GET WATER (НОВАЯ КНОПКА) ───────────────────────────
-    Tab1:CreateButton({
-        Name = "Auto-Get Water",
+    Tab1:Button({
+        Title = "Auto-Get Water",
         Callback = function()
             task.spawn(function()
                 local ReplicatedStorage = game:GetService("ReplicatedStorage")
@@ -3428,11 +3400,9 @@ else
             end)
         end
     })
-    -- ────────────────────────────────────────────────────────────
 
-    -- ── AUTO-GET BOB (НОВАЯ КНОПКА) ─────────────────────────────
-    Tab1:CreateButton({
-        Name = "Auto-Get Bob (need Counter by nexer)",
+    Tab1:Button({
+        Title = "Auto-Get Bob (need Counter by nexer)",
         Callback = function()
             task.spawn(function()
                 local LocalPlayer, LP = game:GetService("Players").LocalPlayer, game:GetService("Players").LocalPlayer
@@ -3518,11 +3488,9 @@ else
             end)
         end
     })
-    -- ────────────────────────────────────────────────────────────
 
-    -- ── AUTO-GET TRAP (НОВАЯ КНОПКА) ────────────────────────────
-    Tab1:CreateButton({
-        Name = "Auto-Get Trap",
+    Tab1:Button({
+        Title = "Auto-Get Trap",
         Callback = function()
             task.spawn(function()
                 local Players = game:GetService("Players")
@@ -3655,7 +3623,185 @@ else
             end)
         end
     })
-    -- ────────────────────────────────────────────────────────────
+
+    Tab1:Button({
+        Title = "Auto-Get 🗿 (Trap request)",
+        Callback = function()
+            task.spawn(function()
+                local equip = debug.getupvalues(require(game.ReplicatedStorage.BACKEND.Lib.Network).fireServer)[3]("SelectGlove")
+                equip:FireServer("Trap")
+
+                task.wait(1)
+
+                local player = game.Players.LocalPlayer
+                local char = player.Character or player.CharacterAdded:Wait()
+                local hrp = char:WaitForChild("HumanoidRootPart")
+                hrp.CFrame = CFrame.new(-1309.7913, 328.2221, 1.4192, 0.9997, -0.0000, -0.0248, 0.0000, 1.0000, -0.0000, 0.0248, 0.0000, 0.9997)
+
+                task.wait(1.5)
+                hrp.CFrame = CFrame.new(312.8075, 62.3753, 185.1011, -0.7490, -0.0000, 0.6626, 0.0000, 1.0000, 0.0000, -0.6626, 0.0000, -0.7490)
+
+                task.wait(1.5)
+
+                local Event = game:GetService("ReplicatedStorage").funnyhilariousbeartrap
+                Event:FireServer()
+
+                task.wait(1.5)
+                hrp.CFrame = CFrame.new(309.2433, 67.4885, 187.0331, 1.0000, -0.0000, -0.0031, 0.0000, 1.0000, -0.0000, 0.0031, 0.0000, 1.0000)
+
+                task.wait(3)
+
+                local ResetEvent = game:GetService("Players").LocalPlayer.Reset
+                ResetEvent:FireServer()
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Doorkeeper",
+        Callback = function()
+            task.spawn(function()
+                local TeleportService = game:GetService("TeleportService")
+                local DOORKEEPER_PLACE_ID = 125845699717230
+                local QUEUE_FN = queue_on_teleport or queueonteleport
+
+                local function clickAllDoors()
+                    while task.wait(0.1) do
+                        for _, v in ipairs(workspace:GetDescendants()) do
+                            if v.Name == "ClickDetector" then
+                                pcall(function()
+                                    fireclickdetector(v)
+                                end)
+                            end
+                        end
+                    end
+                end
+
+                if game.PlaceId == DOORKEEPER_PLACE_ID then
+                    clickAllDoors()
+                    return
+                end
+
+                if not QUEUE_FN then
+                    warn("Your executor does not support queue_on_teleport")
+                    return
+                end
+
+                local payload = ([[
+if game.PlaceId ~= %d then return end
+
+while task.wait(0.1) do
+    for _, v in ipairs(workspace:GetDescendants()) do
+        if v.Name == "ClickDetector" then
+            pcall(function()
+                fireclickdetector(v)
+            end)
+        end
+    end
+end
+]]):format(DOORKEEPER_PLACE_ID)
+
+                QUEUE_FN(payload)
+                TeleportService:Teleport(DOORKEEPER_PLACE_ID)
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Kraken (Needs to be in bossfight)",
+        Callback = function()
+            task.spawn(function()
+                game:GetService("ReplicatedStorage").AbyssEvent:FireServer(true)
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Fish + Trap + Voodoo",
+        Callback = function()
+            task.spawn(function()
+                local Players = game:GetService("Players")
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local LocalPlayer = Players.LocalPlayer
+                local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                local Humanoid = Character:WaitForChild("Humanoid")
+                local HumanoidRootPart = Character:WaitForChild("HumanoidRootPart")
+
+                if not HumanoidRootPart or not Humanoid then return end
+
+                if Character:FindFirstChild("entered") then
+                    warn("Error! Use in lobby!")
+                    return
+                end
+
+                fireclickdetector(workspace.Lobby.Ghost.ClickDetector)
+                task.wait(0.3)
+                game.ReplicatedStorage.Ghostinvisibilityactivated:FireServer()
+                task.wait(0.5)
+
+                fireclickdetector(workspace.Lobby.ZZZZZZZ.ClickDetector)
+                task.wait(0.3)
+                game.ReplicatedStorage.ZZZZZZZSleep:FireServer()
+                task.wait(2)
+
+                fireclickdetector(workspace.Lobby.Brick.ClickDetector)
+                task.wait(0.3)
+
+                local teleportPad = workspace.Lobby:FindFirstChild("Teleport1")
+                if teleportPad then
+                    HumanoidRootPart.CFrame = teleportPad.CFrame
+                    task.wait(0.1)
+                    firetouchinterest(HumanoidRootPart, teleportPad, 0)
+                    task.wait(0.1)
+                    firetouchinterest(HumanoidRootPart, teleportPad, 1)
+                end
+                task.wait(1)
+
+                for _, v in pairs(Character:GetDescendants()) do
+                    if v:IsA("BasePart") then
+                        v:PivotTo(CFrame.new(3000, 3000, 3000))
+                    end
+                end
+
+                task.wait(2.5)
+                HumanoidRootPart.Anchored = true
+
+                task.spawn(function()
+                    if getconnections then
+                        pcall(function()
+                            for _, v in pairs(getconnections(LocalPlayer.Idled)) do
+                                v:Disable()
+                            end
+                        end)
+                    end
+                end)
+
+                local FarmBricks = true
+                task.spawn(function()
+                    repeat
+                        task.wait(0.05)
+                        ReplicatedStorage.lbrick:FireServer()
+                    until FarmBricks == false
+                end)
+
+                local TimeLeft = 3600
+                for i = 1, TimeLeft do
+                    TimeLeft = TimeLeft - 1
+                    local msg = Instance.new("Message", workspace)
+                    msg.Text = "Seconds left to receive: " .. TimeLeft
+                    task.wait(1)
+                    if msg and msg.Parent then
+                        msg:Destroy()
+                    end
+
+                    if Humanoid.Health == 0 then
+                        FarmBricks = false
+                        break
+                    end
+                end
+            end)
+        end
+    })
 
     local isAutoSlenderRunning = false
 
@@ -3666,7 +3812,7 @@ else
         local placeId = game.PlaceId
 
         if placeId ~= 6403373529 and placeId ~= 9015014224 then
-            Rayfield:Notify({
+            WindUI:Notify({
                 Title = "Auto Slender",
                 Content = "This script is not supported on this place.",
                 Duration = 4
@@ -3901,11 +4047,11 @@ else
         end
     end
 
-    Tab1:CreateButton({
-        Name = "Auto Slender",
+    Tab1:Button({
+        Title = "Auto Slender",
         Callback = function()
             if isAutoSlenderRunning then
-                Rayfield:Notify({
+                WindUI:Notify({
                     Title = "Auto Slender",
                     Content = "Slender is already at work",
                     Duration = 3
@@ -3918,7 +4064,7 @@ else
                 startAutoSlender()
             end)
             if not ok then
-                Rayfield:Notify({
+                WindUI:Notify({
                     Title = "Auto Slender",
                     Content = "Error: " .. tostring(errMsg),
                     Duration = 5
@@ -3928,13 +4074,13 @@ else
         end
     })
 
-    Tab1:CreateButton({
-        Name = "Auto-Get Debug",
+    Tab1:Button({
+        Title = "Auto-Get Debug",
         Callback = function()
             task.spawn(function()
                 local DebugRoom = workspace:WaitForChild("Debug Room", 10)
                 if not DebugRoom then
-                    Rayfield:Notify({
+                    WindUI:Notify({
                         Title = "Auto-Get Debug",
                         Content = "Debug Room not found in workspace.",
                         Duration = 4
@@ -3944,7 +4090,7 @@ else
 
                 local Buttons = DebugRoom:WaitForChild("Keypad", 10):WaitForChild("Buttons", 10)
                 if not Buttons then
-                    Rayfield:Notify({
+                    WindUI:Notify({
                         Title = "Auto-Get Debug",
                         Content = "Keypad Buttons not found.",
                         Duration = 4
