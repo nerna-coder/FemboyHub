@@ -21,7 +21,7 @@ msgLabel.Font = Enum.Font.GothamBold
 msgLabel.Text = "Bypassing Anti-Cheat..."
 msgLabel.Parent = bg
 
-msgLabel.Text = "Bypassing Anti-Cheat by nexer...."
+msgLabel.Text = "Bypassing Anti-Cheat..."
 if game.PlaceId==101960002094215 or game.PlaceId==9431156611 then
     loadstring(game:HttpGet("https://raw.githubusercontent.com/NewNexer/NexerHub/refs/heads/main/SB/Modules/CleanClientAntiCheat.luau"))("Slap Royale")
 else
@@ -42,6 +42,12 @@ if not success or not WindUI then
 end
 
 startmessage:Destroy()
+
+
+-- ==========================================================
+-- SCRIPT SCRIPT SCRIPT SCRIPT SCRIPT SCRIPT SCRIPT SCRIPT 
+-- ==========================================================
+
 
 local Players = game:GetService("Players")
 local TeleportService = game:GetService("TeleportService")
@@ -839,6 +845,576 @@ local function runAutoGetConkerNew()
         end)
     end
 end
+
+-- ==========================================================
+-- NEW: Auto-Get Catseye
+-- ==========================================================
+local function runAutoGetCatseye()
+    task.spawn(function()
+        local LocalPlayer = Players.LocalPlayer
+
+        local function SelectGlove(gloveName)
+            local success, result = pcall(function()
+                local network = require(ReplicatedStorage.BACKEND.Lib.Network)
+                local upval = debug.getupvalues(network.fireServer)[3]
+                local equip = upval("SelectGlove")
+                return equip
+            end)
+
+            if success and result then
+                result:FireServer(gloveName)
+            else
+                warn("Failed to change the glove via the network.")
+            end
+        end
+
+        local function EnterArena(part)
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = part.CFrame + Vector3.new(0, 3, 0)
+            end
+        end
+
+        local function TeleportToPosition(cf, offset)
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.CFrame = cf + Vector3.new(0, offset or 0, 0)
+            end
+        end
+
+        local Character = LocalPlayer.Character
+        if not Character then return end
+        if Character:FindFirstChild("entered") then
+            warn("[Catseye] You have to use this in lobby!")
+            return
+        end
+
+        if LocalPlayer.leaderstats.Glove.Value ~= "Recall" then
+            SelectGlove("Recall")
+            task.wait(0.5)
+        end
+
+        EnterArena(workspace.Lobby["Teleport1"])
+        ReplicatedStorage.GlitchTP:FireServer(true)
+        TeleportToPosition(workspace["Debug Room"].File.CFrame, 3)
+
+        local fileObj = workspace["Debug Room"].File
+        local detector = fileObj:FindFirstChildWhichIsA("ClickDetector")
+
+        if detector then
+            pcall(fireclickdetector, detector)
+        else
+            local prompt = fileObj:FindFirstChildWhichIsA("ProximityPrompt")
+            if prompt then
+                prompt.HoldDuration = 0
+                pcall(fireproximityprompt, prompt)
+            end
+        end
+
+        for i = 1, 3 do
+            ReplicatedStorage.Events.CatseyeObtainmentCanProgress:InvokeServer()
+        end
+        task.wait(2)
+
+        for i = 1, 3 do
+            ReplicatedStorage.ClaimRetroFastTravel:FireServer(true, true)
+            TeleportToPosition(CFrame.new(-17004, -4, 4542), 3)
+            for j = 1, 3 do
+                ReplicatedStorage.Events.CatseyeObtainmentCanProgress:InvokeServer()
+            end
+            LocalPlayer.Reset:FireServer()
+            if LocalPlayer.Character and LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                LocalPlayer.Character.HumanoidRootPart.Anchored = true
+            end
+            LocalPlayer.CharacterAdded:Wait()
+            task.wait(1)
+        end
+
+        EnterArena(workspace.Lobby["Teleport1"])
+        ReplicatedStorage.GlitchTP:FireServer(true)
+        TeleportToPosition(workspace["Debug Room"].File.CFrame, 3)
+
+        if detector then
+            pcall(fireclickdetector, detector)
+        else
+            local prompt = fileObj:FindFirstChildWhichIsA("ProximityPrompt")
+            if prompt then
+                prompt.HoldDuration = 0
+                pcall(fireproximityprompt, prompt)
+            end
+        end
+
+        for i = 1, 3 do
+            ReplicatedStorage.Events.CatseyeObtainmentCanProgress:InvokeServer()
+        end
+    end)
+end
+-- ==========================================================
+-- END: Auto-Get Catseye
+-- ==========================================================
+
+-- ==========================================================
+-- NEW: Auto-Get Revenant (by nexer)
+-- ==========================================================
+local function runAutoGetRevenant()
+    task.spawn(function()
+        local function CreateMessage()
+            return {
+                Text = "",
+                Destroy = function() end,
+            }
+        end
+
+        local function TouchObject(part)
+            local plr = game:GetService("Players").LocalPlayer
+            local char = plr.Character
+            if not char then return end
+            local hrp = char:FindFirstChild("HumanoidRootPart")
+            if not hrp or not part then return end
+            if firetouchinterest then
+                firetouchinterest(hrp, part, 0)
+                task.wait(0.05)
+                firetouchinterest(hrp, part, 1)
+            else
+                hrp.CFrame = part.CFrame
+            end
+        end
+
+        local function AutoGetRevenant()
+            local obtainmentmsg = CreateMessage()
+            obtainmentmsg.Text = "Teleporting to Trick or Treat..."
+
+            task.spawn(function()
+                if game.PlaceId ~= 82340649038345 then return end
+                repeat task.wait(.5) until game:GetService("Players").LocalPlayer and game:IsLoaded()
+
+                local LocalPlayer = game:GetService("Players").LocalPlayer
+                local Character, HumanoidRootPart, Humanoid
+                pcall(function()
+                    Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+                end)
+                pcall(function()
+                    HumanoidRootPart = Character:WaitForChild("HumanoidRootPart", 3600)
+                end)
+                pcall(function()
+                    Humanoid = Character:WaitForChild("Humanoid", 3600)
+                end)
+                LocalPlayer.CharacterAdded:Connect(function(AddedCharacter)
+                    pcall(function()
+                        Character = nil
+                        HumanoidRootPart = nil
+                        Humanoid = nil
+                        task.wait()
+                        Character = AddedCharacter
+                        repeat task.wait() until Character:FindFirstChild("HumanoidRootPart")
+                        HumanoidRootPart = Character:WaitForChild("HumanoidRootPart", 3600)
+                        repeat task.wait() until Character:FindFirstChild("Humanoid")
+                        Humanoid = Character:WaitForChild("Humanoid", 3600)
+                    end)
+                end)
+
+                local OverrideVelocity = function()
+                    pcall(function()
+                        for i, v in next, Character:GetDescendants() do
+                            if v and v:IsA("BasePart") then
+                                v.Velocity, v.RotVelocity = Vector3.new(0, 0, 0), Vector3.new(0, 0, 0)
+                            end
+                        end
+                    end)
+                end
+
+                local TeleportToPosition = function(cFrame, time, huh)
+                    local huh = huh or false
+                    local time = time or 1
+                    local starttimee = tick()
+                    while tick() - starttimee < time do
+                        pcall(function()
+                            OverrideVelocity()
+                            if huh == true then
+                                for i, v in next, Character:GetChildren() do
+                                    if v:IsA("BasePart") then v:PivotTo(cFrame) end
+                                end
+                            elseif huh == false then
+                                HumanoidRootPart:PivotTo(cFrame)
+                            end
+                        end)
+                        task.wait()
+                    end
+                end
+
+                if not workspace:GetAttribute("ToolsInitCompleted") then
+                    workspace:SetAttribute("ToolsInitCompleted", true)
+                    task.spawn(function()
+                        while true do
+                            pcall(function()
+                                game:GetService("ReplicatedStorage").Modules.Common.DialogueServer.Remotes.ResondToDialogue:FireServer(0)
+                                game:GetService("ReplicatedStorage").Modules.Common.DialogueServer.Remotes.VoteSkip:FireServer("Count Cornifier")
+                            end)
+                            for _, Tool in next, LocalPlayer.Backpack:GetChildren() do
+                                if Tool and Tool:IsA("Tool") and Character then
+                                    Tool.Parent = Character
+                                end
+                            end
+                            task.wait(.1777)
+                        end
+                    end)
+                    task.spawn(function()
+                        while true do
+                            pcall(function()
+                                for _, Tool in next, Character:GetChildren() do
+                                    if Tool and Tool:IsA("Tool") and LocalPlayer.Backpack then
+                                        Tool.Parent = LocalPlayer.Backpack
+                                    end
+                                end
+                            end)
+                            task.wait(1)
+                        end
+                    end)
+                end
+
+                function StartFarming()
+                    local IsBagFull = function()
+                        local Ok, Result = pcall(function()
+                            local Hud = LocalPlayer.PlayerGui:FindFirstChild("HUD")
+                            if not Hud then return false end
+                            local Bag = Hud:FindFirstChild("bag_full")
+                            if not Bag then return false end
+                            return Bag.Visible == true and Bag.TextTransparency == 0
+                        end)
+                        return Ok and Result
+                    end
+                    local PartSize = function(Part)
+                        local Ok, Result = pcall(function()
+                            local S = Part.Size
+                            return S.X * S.Y * S.Z
+                        end)
+                        if Ok and Result then return Result end
+                        return math.huge
+                    end
+                    local IsTargetValid = function(Target)
+                        if not Target or not Target.Parent then return false end
+                        local Model = Target
+                        if Target:IsA("BasePart") then Model = Target.Parent end
+                        if Model and Model.GetAttribute and Model:GetAttribute("IsDead") == true then return false end
+                        if Target.GetAttribute and Target:GetAttribute("IsDead") == true then return false end
+                        return true
+                    end
+                    local PositionAboveTarget = function(Target)
+                        if not HumanoidRootPart or not Target or not Target.Parent then return end
+                        local TargetPos = Target.Position
+                        local AbovePos = TargetPos + Vector3.new(0, 12, 0)
+                        local LookAt = CFrame.lookAt(AbovePos, TargetPos)
+                        pcall(function() HumanoidRootPart.CFrame = LookAt end)
+                        OverrideVelocity()
+                    end
+                    local CountTargets = function()
+                        local Count = 0
+                        for _, v in next, workspace.NPC:GetChildren() do
+                            if v and v.Name == "Minion" and v.Name ~= LocalPlayer.Name then
+                                if v:FindFirstChild("CandyCorn") or v:FindFirstChildWhichIsA("BasePart") then
+                                    if v:GetAttribute("IsDead") ~= true then
+                                        Count = Count + 1
+                                    end
+                                end
+                            end
+                        end
+                        return Count
+                    end
+                    local FarmOnce = function()
+                        local Targets = {}
+                        for _, v in next, workspace.NPC:GetChildren() do
+                            if v and v.Name ~= LocalPlayer.Name and Character and v.Name == "Minion" then
+                                local Part = nil
+                                if v:FindFirstChild("CandyCorn") then
+                                    Part = v.CandyCorn
+                                elseif v:FindFirstChildWhichIsA("BasePart") then
+                                    Part = v:FindFirstChildWhichIsA("BasePart")
+                                end
+                                if Part then
+                                    table.insert(Targets, { Model = v, Part = Part })
+                                end
+                            end
+                        end
+                        table.sort(Targets, function(a, b)
+                            return PartSize(a.Part) < PartSize(b.Part)
+                        end)
+                        local BagFilled = false
+                        for _, Entry in ipairs(Targets) do
+                            local Model = Entry.Model
+                            local Part = Entry.Part
+                            local LastHit = 0
+                            local StuckStart = os.clock()
+                            while true do
+                                if IsBagFull() then
+                                    BagFilled = true
+                                    break
+                                end
+                                local Valid = IsTargetValid(Model) and Part ~= nil and Part.Parent ~= nil and Character ~= nil and Character.Parent ~= nil
+                                if not Valid then break end
+                                if not Part.Parent then break end
+                                if Model:GetAttribute("IsDead") == true then break end
+                                if os.clock() - StuckStart > 11 then
+                                    pcall(function() Model:Destroy() end)
+                                    break
+                                end
+                                PositionAboveTarget(Part)
+                                local Now = os.clock()
+                                if Now - LastHit >= 0.15 then
+                                    LastHit = Now
+                                    for _, Remote in next, Character:GetDescendants() do
+                                        if Remote and Remote:IsA("RemoteEvent") and Remote.Name == "Network" then
+                                            pcall(function()
+                                                if Remote.Parent and Remote.Parent:IsA("Tool") then
+                                                    Remote.Parent:Activate()
+                                                end
+                                                Remote:FireServer("Hit", Part)
+                                            end)
+                                        end
+                                    end
+                                end
+                                task.wait()
+                            end
+                            if BagFilled then break end
+                        end
+                        return BagFilled
+                    end
+
+                    while IsBagFull() do task.wait(0.5) end
+
+                    local BagFilled = false
+                    while not BagFilled do
+                        if CountTargets() == 0 then
+                            pcall(function()
+                                if HumanoidRootPart and HumanoidRootPart.Parent then
+                                    HumanoidRootPart.CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(-math.pi / 2, 0, 0)
+                                end
+                            end)
+                            OverrideVelocity()
+                            while CountTargets() == 0 do
+                                if IsBagFull() then
+                                    BagFilled = true
+                                    break
+                                end
+                                pcall(function()
+                                    if HumanoidRootPart and HumanoidRootPart.Parent then
+                                        HumanoidRootPart.CFrame = CFrame.new(0, 0, 0) * CFrame.Angles(-math.pi / 2, 0, 0)
+                                    end
+                                end)
+                                OverrideVelocity()
+                                task.wait()
+                            end
+                            if BagFilled then break end
+                        end
+                        BagFilled = FarmOnce()
+                        if not BagFilled then task.wait(0.5) end
+                    end
+
+                    if HumanoidRootPart and HumanoidRootPart.Parent then
+                        TeleportToPosition(CFrame.new(-30, 11, 662), 2)
+                    end
+                end
+
+                function StartDefending()
+                    local DefenseActive = true
+                    local IsTargetValid = function(Target)
+                        if not Target or not Target.Parent then return false end
+                        local Model = Target
+                        if Target:IsA("BasePart") then Model = Target.Parent end
+                        if Model and Model.GetAttribute and Model:GetAttribute("IsDead") == true then return false end
+                        if Target.GetAttribute and Target:GetAttribute("IsDead") == true then return false end
+                        return true
+                    end
+                    local PositionAboveTarget = function(Target, Height)
+                        Height = Height or 12
+                        if not HumanoidRootPart or not Target or not Target.Parent then return end
+                        local TargetPos = Target.Position
+                        local AbovePos = TargetPos + Vector3.new(0, Height, 0)
+                        pcall(function()
+                            HumanoidRootPart.CFrame = CFrame.lookAt(AbovePos, TargetPos)
+                        end)
+                        OverrideVelocity()
+                    end
+                    local HitTarget = function(Part)
+                        if not Character or not Part or not Part.Parent then return end
+                        for _, Remote in next, Character:GetDescendants() do
+                            if Remote and Remote:IsA("RemoteEvent") and Remote.Name == "Network" then
+                                pcall(function()
+                                    if Remote.Parent and Remote.Parent:IsA("Tool") then
+                                        Remote.Parent:Activate()
+                                    end
+                                    Remote:FireServer("Hit", Part)
+                                end)
+                            end
+                        end
+                    end
+                    local GetDefendPos = function()
+                        local Ok, Result = pcall(function()
+                            local DropZone = workspace:FindFirstChild("DropZone")
+                            if not DropZone then return nil end
+                            local NpcFolder = DropZone:FindFirstChild("NPC")
+                            if not NpcFolder then return nil end
+                            local NpcModel = NpcFolder:FindFirstChild("NPC")
+                            if not NpcModel then return nil end
+                            return NpcModel.WorldPivot.Position
+                        end)
+                        return Ok and Result or nil
+                    end
+                    local HoldPost = function(DefendPos)
+                        if not HumanoidRootPart or not HumanoidRootPart.Parent then return end
+                        local PostPos = DefendPos + Vector3.new(0, 12, 0)
+                        pcall(function()
+                            HumanoidRootPart.CFrame = CFrame.lookAt(PostPos, DefendPos)
+                        end)
+                        OverrideVelocity()
+                    end
+
+                    pcall(function()
+                        LocalPlayer.CharacterAdded:Connect(function(AddedCharacter)
+                            DefenseActive = false
+                        end)
+                    end)
+
+                    while DefenseActive do
+                        local DefendPos = GetDefendPos()
+                        if DefendPos then
+                            local Chosen = nil
+                            local ChosenDist = 80
+                            for _, v in next, workspace.NPC:GetChildren() do
+                                if v and v.Name == "Minion" and v.Name ~= LocalPlayer.Name
+                                    and v:GetAttribute("IsDead") ~= true
+                                then
+                                    local Part = v:FindFirstChild("CandyCorn") or v:FindFirstChildWhichIsA("BasePart")
+                                    if Part and Part.Parent then
+                                        local Dist = (Part.Position - DefendPos).Magnitude
+                                        if Dist <= 80 and Dist < ChosenDist then
+                                            ChosenDist = Dist
+                                            Chosen = { Model = v, Part = Part }
+                                        end
+                                    end
+                                end
+                            end
+                            if Chosen then
+                                local Model = Chosen.Model
+                                local Part = Chosen.Part
+                                local LastHit = 0
+                                while DefenseActive and IsTargetValid(Model) and Part ~= nil and Part.Parent ~= nil
+                                    and Character ~= nil and Character.Parent ~= nil
+                                    and Model:GetAttribute("IsDead") ~= true do
+                                    local CurDefendPos = GetDefendPos()
+                                    if not CurDefendPos then break end
+                                    if (Part.Position - CurDefendPos).Magnitude > 80 then break end
+                                    PositionAboveTarget(Part, 12)
+                                    local Now = os.clock()
+                                    if Now - LastHit >= 0.15 then
+                                        LastHit = Now
+                                        HitTarget(Part)
+                                    end
+                                    task.wait()
+                                end
+                                if DefenseActive then
+                                    local CurDefendPos = GetDefendPos()
+                                    if CurDefendPos then
+                                        HoldPost(CurDefendPos)
+                                        task.wait()
+                                    end
+                                end
+                            else
+                                HoldPost(DefendPos)
+                            end
+                        end
+                        task.wait()
+                    end
+                end
+
+                function DepositCandy()
+                    TeleportToPosition((CFrame.new(workspace.DropZone.DropZone.WorldPivot.Position) * CFrame.new(0, 10, 0)), 2)
+                    task.wait(1)
+                    workspace.DropZone.DropZone.ProximityPrompt.HoldDuration = 0
+                    pcall(fireproximityprompt, workspace.DropZone.DropZone.ProximityPrompt)
+                    task.wait(2)
+                end
+
+                function InteractWithCornifier()
+                    TeleportToPosition((CFrame.new(workspace.DropZone.NPC.NPC.WorldPivot.Position) * CFrame.new(0, 10, 0)), 2)
+                    task.wait(1)
+                    workspace.DropZone.NPC.NPC.ProximityPrompt.HoldDuration = 0
+                    pcall(fireproximityprompt, workspace.DropZone.NPC.NPC.ProximityPrompt)
+                    task.wait(2)
+                end
+
+                function TakeSoulCandy()
+                    TeleportToPosition((CFrame.new(workspace.EndSequence.SoulCandy.Model.Model.WorldPivot.Position) * CFrame.new(0, 10, 0)), 2)
+                    task.wait(1)
+                    workspace.EndSequence.SoulCandy.Model.Model:FindFirstChild("ProximityPrompt", true).HoldDuration = 0
+                    pcall(fireproximityprompt, workspace.EndSequence.SoulCandy.Model.Model:FindFirstChild("ProximityPrompt", true))
+                    task.wait(2)
+                end
+
+                function CollectGlove()
+                    TeleportToPosition((CFrame.new(workspace.EndSequence.RevenantGlove.WorldPivot.Position) * CFrame.new(0, 10, 0)), 2)
+                    task.wait(1)
+                    workspace.EndSequence.RevenantGlove.glove.ProximityPrompt.HoldDuration = 0
+                    while true do
+                        pcall(fireproximityprompt, workspace.EndSequence.RevenantGlove.glove.ProximityPrompt)
+                        task.wait(.667)
+                    end
+                end
+
+                repeat task.wait() until Character:FindFirstChildWhichIsA("Tool") or LocalPlayer.Backpack:FindFirstChildWhichIsA("Tool")
+                StartFarming()
+                for i = 1, 2 do DepositCandy() end
+                StartDefending()
+                task.wait(2)
+                StartFarming()
+                DepositCandy()
+                StartFarming()
+                for i = 1, 2 do DepositCandy() end
+                StartDefending()
+                task.wait(2)
+                StartFarming()
+                DepositCandy()
+                StartFarming()
+                DepositCandy()
+                StartFarming()
+                for i = 1, 2 do DepositCandy() end
+                StartDefending()
+                task.wait(20)
+                TakeSoulCandy()
+                task.spawn(function()
+                    while true do
+                        if workspace.DropZone.NPC.NPC:FindFirstChild("ProximityPrompt", true).Enabled == true then
+                            pcall(fireproximityprompt, workspace.DropZone.NPC.NPC:FindFirstChild("ProximityPrompt", true))
+                        end
+                        task.wait(1.777)
+                    end
+                end)
+                StartDefending()
+                task.wait(2)
+                task.spawn(function()
+                    while true do
+                        pcall(function()
+                            fireproximityprompt(workspace.EndSequence.RevenantGlove:FindFirstChild("ProximityPrompt", true))
+                        end)
+                        task.wait(1.777)
+                    end
+                end)
+            end)
+
+            repeat task.wait() until
+                workspace.Arena.Halloween_Decorations:FindFirstChild("TrickOrTreatTeleport", true).Counter.SurfaceGui.TextLabel.Text == "1"
+                and workspace.Arena.Halloween_Decorations:FindFirstChild("TrickOrTreatTeleport", true).PlayerCounter.SurfaceGui.TextLabel.Text == "0/4 Players"
+                and game:GetService("Players").LocalPlayer.Character
+                and game:GetService("Players").LocalPlayer.Character:FindFirstChild("Humanoid")
+                and game:GetService("Players").LocalPlayer.Character.Humanoid.Health ~= 0
+
+            TouchObject(workspace.Arena.Halloween_Decorations:FindFirstChild("TrickOrTreatTeleport", true).Hitbox)
+        end
+
+        local ok, err = pcall(AutoGetRevenant)
+        if not ok then
+            warn("[Revenant] error: " .. tostring(err))
+        end
+    end)
+end
+
 
 local Window
 
@@ -2786,8 +3362,7 @@ elseif placeId == 80420091630966 then
                         if not _G.StartFly then
                             CreateFreezeBV()
                         end
-                    elseif not _G.TeleportSafe then
-                        CreateFreezeBV({ Remove = true })
+                    elseif not _G.TeleportSafe then                        CreateFreezeBV({ Remove = true })
                     end
 
                     task.wait()
@@ -2981,6 +3556,21 @@ elseif placeId == 80420091630966 then
         end
     })
 
+elseif placeId == 82340649038345 then
+    Window = WindUI:CreateWindow({
+        Title = "Femboy Hub - Revenant",
+        ConfigurationSaving = { Enabled = false }
+    })
+
+    local Tab = Window:Tab({Title = "Revenant"})
+
+    Tab:Button({
+        Title = "Auto-Get Revenant (by nexer)",
+        Callback = function()
+            runAutoGetRevenant()
+        end
+    })
+
 else
     Window = WindUI:CreateWindow({
         Title = "Femboy Hub",
@@ -3051,6 +3641,20 @@ else
         Title = "Auto-Get conker",
         Callback = function()
             runAutoGetConkerNew()
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Catseye",
+        Callback = function()
+            runAutoGetCatseye()
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Revenant (by nexer)",
+        Callback = function()
+            runAutoGetRevenant()
         end
     })
 
