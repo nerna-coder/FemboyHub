@@ -1,5 +1,4 @@
---This code was created by nerna or zemboxo sx and silentabsolutedayn. Anyway, blah blah, join our Discord server
--- Step 1: Bypass Anti-Cheat
+--This code was created by nerna or zemboxo sx and silentabsolutedayn. Anyway, blah blah, join our Discord servet plzzzzzzzzzzzzzz
 local startmessage = Instance.new("ScreenGui")
 startmessage.Name = "LoadingGui"
 startmessage.ResetOnSpawn = false
@@ -846,9 +845,7 @@ local function runAutoGetConkerNew()
     end
 end
 
--- ==========================================================
--- NEW: Auto-Get Catseye
--- ==========================================================
+
 local function runAutoGetCatseye()
     task.spawn(function()
         local LocalPlayer = Players.LocalPlayer
@@ -947,13 +944,7 @@ local function runAutoGetCatseye()
         end
     end)
 end
--- ==========================================================
--- END: Auto-Get Catseye
--- ==========================================================
 
--- ==========================================================
--- NEW: Auto-Get Revenant (by nexer)
--- ==========================================================
 local function runAutoGetRevenant()
     task.spawn(function()
         local function CreateMessage()
@@ -3572,8 +3563,10 @@ elseif placeId == 82340649038345 then
     })
 
 else
-    Window = WindUI:CreateWindow({
+     Window = WindUI:CreateWindow({
         Title = "Femboy Hub",
+        Icon = "gravity:logo-github",
+        Author = "by silentabsolutedayn and nerna-coder",
         ConfigurationSaving = { Enabled = true, FolderName = "FemboyHubConfig", FileName = "Config" }
     })
 
