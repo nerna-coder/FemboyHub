@@ -3563,17 +3563,28 @@ elseif placeId == 82340649038345 then
     })
 
 else
-    if not isfile("NexerStuff/Pictures/wed.jpg") then
-    writefile("NexerStuff/Pictures/wed.jpg", game:HttpGet("https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/photo_2026-10-29_11-35-01.jpg"))
-end 
+  local Backgrounds = {
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/photo_2026-10-29_11-35-01.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/2.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/1.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/4.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/6.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/5.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/7.jpg",
+}
+
+
+
+local randomIndex = math.random(1, #Backgrounds)
+local filename = "NexerStuff/Pictures/bg_" .. randomIndex .. ".jpg"
+writefile(filename, game:HttpGet(Backgrounds[randomIndex]))
 Window = WindUI:CreateWindow({
     Title = "Femboy Hub",
     Icon = "rbxassetid://125491158830304",
     Author = "by silentabsolutedayn and nerna-coder",
-    Transparent = true,
+    Background = getcustomasset(filename),
     Transparency = 0.15,
     BackgroundImageTransparency = 0.55,
-    Background = getcustomasset("NexerStuff/Pictures/wed.jpg"),
     ConfigurationSaving = { Enabled = true, FolderName = "FemboyHubConfig", FileName = "Config" }
 })
     local currentJob = game.JobId
