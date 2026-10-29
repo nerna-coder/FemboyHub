@@ -3712,20 +3712,27 @@ elseif placeId == 77963332815593 then
     })
 
     Quest2Group:Button({
-        Title = "Slap Light Orb",
-        Callback = function()
-            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
-                for i, v in pairs(game.Workspace:GetChildren()) do
-                    if v.Name:lower():find("lightorb") then
-                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
-                        wait(0.4)
-                        slapglove(v)
-                        task.wait(0.7)
+    Title = "Slap Light Orb",
+    Callback = function()
+        local char = game:GetService("Players").LocalPlayer.Character
+        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
+        local hrp = char.HumanoidRootPart
+        for _, v in pairs(workspace:GetChildren()) do
+            if v.Name:lower():find("lightorb") then
+                hrp.CFrame = v.CFrame
+                task.wait(0.4)
+                local tool = char:FindFirstChildWhichIsA("Tool")
+                if tool then tool:Activate() end
+                for _, remote in pairs(char:GetDescendants()) do
+                    if remote:IsA("RemoteEvent") and remote.Name == "Network" then
+                        pcall(function() remote:FireServer("Hit", v) end)
                     end
                 end
+                task.wait(0.7)
             end
         end
-    })
+    end
+})
 
     Quest2Group:Button({
         Title = "Teleport Boss",
