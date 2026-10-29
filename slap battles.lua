@@ -3563,13 +3563,19 @@ elseif placeId == 82340649038345 then
     })
 
 else
-     Window = WindUI:CreateWindow({
-        Title = "Femboy Hub",
-        Icon = "gravity:logo-github",
-        Author = "by silentabsolutedayn and nerna-coder",
-        ConfigurationSaving = { Enabled = true, FolderName = "FemboyHubConfig", FileName = "Config" }
-    })
-
+    if not isfile("NexerStuff/Pictures/wed.jpg") then
+    writefile("NexerStuff/Pictures/wed.jpg", game:HttpGet("https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/photo_2026-10-29_11-35-01.jpg"))
+end 
+Window = WindUI:CreateWindow({
+    Title = "Femboy Hub",
+    Icon = "rbxassetid://125491158830304",
+    Author = "by silentabsolutedayn and nerna-coder",
+    Transparent = true,
+    Transparency = 0.15,
+    BackgroundImageTransparency = 0.55,
+    Background = getcustomasset("NexerStuff/Pictures/wed.jpg"),
+    ConfigurationSaving = { Enabled = true, FolderName = "FemboyHubConfig", FileName = "Config" }
+})
     local currentJob = game.JobId
     local req = (syn and syn.request) or (http and http.request) or http_request or request
 
@@ -3641,6 +3647,454 @@ else
         Title = "Auto-Get Catseye",
         Callback = function()
             runAutoGetCatseye()
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Terrain",
+        Callback = function()
+            task.spawn(function()
+                local char = lp.Character or lp.CharacterAdded:Wait()
+                if char:FindFirstChild("entered") then
+                    WindUI:Notify({ Title = "Error!", Content = "Use this in lobby!", Duration = 3 })
+                    return
+                end
+                local RS = game:GetService("ReplicatedStorage")
+                if RS:FindFirstChild("Cobblestone") then
+                    RS.Remotes.PickupCobblestone:FireServer(RS.Cobblestone)
+                end
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Megarock",
+        Callback = function()
+            task.spawn(function()
+                local RS = game:GetService("ReplicatedStorage")
+                local localPlayer = game:GetService("Players").LocalPlayer
+
+                local char = localPlayer.Character or localPlayer.CharacterAdded:Wait()
+                if char:FindFirstChild("entered") then
+                    WindUI:Notify({ Title = "Error!", Content = "Use this in lobby!", Duration = 3 })
+                    return
+                end
+
+                local Lobby = workspace:FindFirstChild("Lobby")
+                if not Lobby then
+                    WindUI:Notify({ Title = "Error!", Content = "Lobby not found!", Duration = 3 })
+                    return
+                end
+
+                local Diamond = Lobby:FindFirstChild("Diamond")
+                local ClickDetector = Diamond and Diamond:FindFirstChild("ClickDetector")
+                local Teleport1 = Lobby:FindFirstChild("Teleport1")
+
+                if not ClickDetector or not Teleport1 then
+                    WindUI:Notify({ Title = "Error!", Content = "Diamond/Teleport1 not found!", Duration = 3 })
+                    return
+                end
+
+                local FinalCF = CFrame.new(-98492.7344, 77936.5625, -189037.5938, 0.8241, -0.0000, 0.5664, 0.0000, 1.0000, -0.0000, -0.5664, 0.0000, 0.8241)
+
+                local running = true
+                local startTime = tick()
+                local duration = 10 * 60 * 60
+                local tpWait = 7
+                local remoteFired = false
+
+                localPlayer.CharacterAdded:Connect(function()
+                    running = false
+                end)
+
+                if fireclickdetector then
+                    fireclickdetector(ClickDetector)
+                end
+
+                local hrp = char:WaitForChild("HumanoidRootPart")
+
+                hrp.CFrame = Teleport1.CFrame
+                task.wait(0.5)
+
+                hrp.CFrame = FinalCF
+                task.wait(tpWait)
+
+                if running and not remoteFired then
+                    remoteFired = true
+                    RS.Rockmode:FireServer()
+                end
+
+                WindUI:Notify({
+                    Title = "Megarock",
+                    Content = "Started. Leave the script running for 10 hours. Resetting your character will stop it.",
+                    Duration = 8
+                })
+
+                while running and (tick() - startTime) < duration do
+                    local remaining = duration - (tick() - startTime)
+                    if remaining <= 0 then break end
+
+                    if not localPlayer.Character or not localPlayer.Character.Parent then
+                        running = false
+                        break
+                    end
+
+                    task.wait(60)
+                end
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Instant Lamp",
+        Callback = function()
+            task.spawn(function()
+                local char = lp.Character or lp.CharacterAdded:Wait()
+                if char:FindFirstChild("entered") then
+                    WindUI:Notify({ Title = "Error!", Content = "Use this in lobby!", Duration = 3 })
+                    return
+                end
+
+                local folder = workspace:FindFirstChild("Lobby")
+                if not folder then return end
+
+                local glove = folder:FindFirstChild("Kill streak")
+                if glove then
+                    local cd = glove:FindFirstChild("ClickDetector")
+                    if cd then
+                        fireclickdetector(cd)
+                    end
+                end
+
+                task.wait(1.5)
+
+                local target = folder:FindFirstChild("ZZZZZZZ")
+                if target then
+                    local targetCd = target:FindFirstChild("ClickDetector") or target:FindFirstChildOfClass("ClickDetector")
+                    if targetCd then
+                        fireclickdetector(targetCd)
+                    end
+                end
+
+                local event = ReplicatedStorage:WaitForChild("nightmare")
+                for i = 1, 88 do
+                    event:FireServer("LightBroken")
+                    task.wait(0.01)
+                end
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Instant buddies (by nexer)",
+        Callback = function()
+            task.spawn(function()
+                local LocalPlayer = lp
+                local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+                local function SelectGlove(gloveName)
+                    local ok, equip = pcall(function()
+                        local network = require(ReplicatedStorage.BACKEND.Lib.Network)
+                        local upval = debug.getupvalues(network.fireServer)[3]
+                        return upval("SelectGlove")
+                    end)
+                    if ok and equip then
+                        equip:FireServer(gloveName)
+                    end
+                end
+
+                local function GetAmountOfPeopleInArena()
+                    local count = 0
+                    for _, p in ipairs(Players:GetPlayers()) do
+                        local c = p.Character
+                        if c then
+                            local isInArena = c:FindFirstChild("isInArena")
+                            if isInArena and isInArena.Value then
+                                count = count + 1
+                            end
+                        end
+                    end
+                    return count
+                end
+
+                if not Character then return end
+                if Character:FindFirstChild("entered") then
+                    WindUI:Notify({
+                        Title = "Error!",
+                        Content = "You have to use this in lobby!",
+                        Duration = 3,
+                    })
+                    return
+                end
+                if GetAmountOfPeopleInArena() < 3 then
+                    WindUI:Notify({
+                        Title = "Error!",
+                        Content = "There must be atleast 3 people in the arena!",
+                        Duration = 3,
+                    })
+                    return
+                end
+                if LocalPlayer.leaderstats.Glove.Value ~= "Golden" then
+                    SelectGlove("Golden")
+                    task.wait(0.5)
+                end
+                for _, v in next, game:GetService("Players"):GetPlayers() do
+                    if v and v.Character and v.Character:FindFirstChild("HumanoidRootPart") then
+                        pcall(function()
+                            game:GetService("ReplicatedStorage").GoldenHit:FireServer(v.Character.HumanoidRootPart, true)
+                        end)
+                    end
+                end
+                task.wait(0.05)
+                game:GetService("ReplicatedStorage").ACH:FireServer()
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Instant Retro",
+        Callback = function()
+            task.spawn(function()
+                local LocalPlayer = lp
+                local Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait()
+
+                local function TouchObject(part)
+                    local char = LocalPlayer.Character
+                    if not char then return end
+                    local hrp = char:FindFirstChild("HumanoidRootPart")
+                    if not hrp or not part then return end
+                    if firetouchinterest then
+                        firetouchinterest(hrp, part, 0)
+                        task.wait(0.05)
+                        firetouchinterest(hrp, part, 1)
+                    else
+                        hrp.CFrame = part.CFrame
+                    end
+                end
+
+                local function TeleportToPosition(cf, dur)
+                    dur = dur or 1
+                    local startT = tick()
+                    while tick() - startT < dur do
+                        local ch = LocalPlayer.Character
+                        if ch and ch:FindFirstChild("HumanoidRootPart") then
+                            ch.HumanoidRootPart.CFrame = cf
+                        end
+                        task.wait()
+                    end
+                end
+
+                if not Character then return end
+                if Character:FindFirstChild("entered") then
+                    WindUI:Notify({
+                        Title = "Error!",
+                        Content = "You have to use this in lobby!",
+                        Duration = 3,
+                    })
+                    return
+                end
+
+                local PS = LocalPlayer:FindFirstChild("PlayerScripts")
+                local BACKEND = PS and PS:FindFirstChild("BACKEND")
+                local Systems = BACKEND and BACKEND:FindFirstChild("Systems")
+                local VFX = Systems and Systems:FindFirstChild("VFXReplication")
+
+                if VFX and VFX:FindFirstChild("RepressedMemory") then
+                    VFX.RepressedMemory.Name = "RM"
+                end
+
+                local rsanswrr
+                repeat
+                    task.wait(0.005)
+                    game:GetService("ReplicatedStorage").RecallReset:FireServer(nil, true)
+                    task.spawn(function()
+                        local ok, res = pcall(function()
+                            return game:GetService("ReplicatedStorage").RecallLastInteractionSteps:InvokeServer(false)
+                        end)
+                        if ok then rsanswrr = res end
+                    end)
+                until rsanswrr == "Simon says walk through the portal to collect your reward"
+
+                TouchObject(workspace.RepressedMemories.Portal)
+
+                repeat task.wait() until LocalPlayer.leaderstats.Glove.Value == "Recall"
+
+                local finishDoor = workspace:FindFirstChild("FinishDoor_Retro")
+                if finishDoor then
+                    local ti = finishDoor:FindFirstChild("TouchInterest", true)
+                    if ti and ti.Parent then
+                        task.spawn(TeleportToPosition, ti.Parent.CFrame, 3)
+                    end
+                end
+                game:GetService("ReplicatedStorage").ClaimRetroFastTravel:FireServer(true, true)
+
+                if VFX and VFX:FindFirstChild("RM") then
+                    VFX.RM.Name = "RepressedMemory"
+                end
+            end)
+        end
+    })
+
+    Tab1:Button({
+        Title = "Auto-Get Swordfighter",
+        Desc = "You must have Retro.",
+        Callback = function()
+            task.spawn(function()
+                local Players = game:GetService("Players")
+                local ReplicatedStorage = game:GetService("ReplicatedStorage")
+                local LocalPlayer = Players.LocalPlayer
+
+                local qot = queue_on_teleport or queueonteleport or queue_on_tp or queueontp
+                if not qot then
+                    WindUI:Notify({ Title = "Error!", Content = "Executor has no queue_on_teleport", Duration = 3 })
+                    return
+                end
+
+                local Character, HumanoidRootPart, Humanoid
+                local function bindCharacter(char)
+                    Character = char
+                    HumanoidRootPart = char:WaitForChild("HumanoidRootPart", 10)
+                    Humanoid = char:WaitForChild("Humanoid", 10)
+                end
+                bindCharacter(LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait())
+                LocalPlayer.CharacterAdded:Connect(function(char)
+                    Character, HumanoidRootPart, Humanoid = nil, nil, nil
+                    task.wait()
+                    bindCharacter(char)
+                end)
+
+                local leaderstats = LocalPlayer:WaitForChild("leaderstats", 30)
+                local GloveValue = leaderstats and leaderstats:WaitForChild("Glove", 30)
+                if not GloveValue then
+                    WindUI:Notify({ Title = "Error!", Content = "leaderstats.Glove not found", Duration = 3 })
+                    return
+                end
+
+                local NETWORK = ReplicatedStorage:FindFirstChild("_NETWORK")
+                if not NETWORK then
+                    local GloveRemoteProbe = ReplicatedStorage:FindFirstChild("CMDRGetGloveIDs", true)
+                    NETWORK = GloveRemoteProbe and GloveRemoteProbe.Parent
+                end
+                if not NETWORK then return end
+
+                local SelectGloveRemote
+                local started = tick()
+                repeat
+                    task.wait()
+                    SelectGloveRemote = NETWORK:FindFirstChild("SelectGlove") or NETWORK:FindFirstChild("SelectGlove [STUDIO]")
+                until SelectGloveRemote or tick() - started > 5
+
+                local function SelectGlove(glove)
+                    if SelectGloveRemote then
+                        SelectGloveRemote:FireServer(glove)
+                        local st = tick()
+                        repeat task.wait() until GloveValue.Value == glove or tick() - st >= 2
+                        task.wait(.1)
+                    end
+                end
+
+                local function ZeroVelocity()
+                    for _, part in next, Character:GetDescendants() do
+                        if part:IsA("BasePart") then
+                            part.Velocity, part.RotVelocity = Vector3.zero, Vector3.zero
+                        end
+                    end
+                end
+
+                local function TeleportToPosition(cFrame, seconds)
+                    local st = tick()
+                    while tick() - st < (seconds or 1) do
+                        pcall(function()
+                            task.spawn(ZeroVelocity)
+                            if HumanoidRootPart then
+                                HumanoidRootPart:PivotTo(cFrame)
+                            end
+                        end)
+                        task.wait()
+                    end
+                end
+
+                local function RingOfFireSpawned()
+                    local ok, ring = pcall(function()
+                        return workspace.Arena.CannonIsland["Cannon Island [OLD]"].Model.Towers:FindFirstChild("Ring of Fire")
+                    end)
+                    return ok and ring ~= nil
+                end
+
+                if GloveValue.Value ~= "Retro" then
+                    SelectGlove("Retro")
+                end
+
+                qot([[if game.PlaceId~=117232463555132 then return end
+                repeat task.wait(.5) until game:GetService("Players").LocalPlayer and game:IsLoaded()
+
+                local LocalPlayer = game:GetService("Players").LocalPlayer
+                local Character, HumanoidRootPart, Humanoid
+                pcall(function() Character = LocalPlayer.Character or LocalPlayer.CharacterAdded:Wait() end)
+                pcall(function() HumanoidRootPart = Character:WaitForChild("HumanoidRootPart",3600) end)
+                pcall(function() Humanoid = Character:WaitForChild("Humanoid",3600) end)
+                LocalPlayer.CharacterAdded:Connect(function(AddedCharacter)
+                    pcall(function()
+                        Character = nil
+                        HumanoidRootPart = nil
+                        Humanoid = nil
+                        task.wait()
+                        Character = AddedCharacter
+                        repeat task.wait() until Character:FindFirstChild("HumanoidRootPart")
+                        HumanoidRootPart = Character:WaitForChild("HumanoidRootPart",3600)
+                        repeat task.wait() until Character:FindFirstChild("Humanoid")
+                        Humanoid = Character:WaitForChild("Humanoid",3600)
+                    end)
+                end)
+                local bossdied = false
+                task.spawn(function()
+                    while true do
+                        if bossdied==true then break end
+                        pcall(function() workspace.Map.Components.NPCs.FinalBoss.FinalBoss.Humanoid.RigType = Enum.HumanoidRigType.R15 end)
+                        pcall(function() workspace.Map.Components.NPCs.FinalBoss.FinalBoss.Humanoid.Health = 0 end)
+                        pcall(function() HumanoidRootPart:PivotTo(workspace.Map.Components.NPCs.FinalBoss.FinalBoss.HumanoidRootPart.CFrame) end)
+                        task.wait(.05)
+                    end
+                end)
+                game:GetService("ReplicatedStorage").Remotes.ActivateCutscene.OnClientEvent:Connect(function(a)
+                    if a=="FinalBossVictory" then
+                        bossdied = true
+                        task.spawn(function()
+                            while true do
+                                HumanoidRootPart:PivotTo(CFrame.new(-9, 846, 288))
+                                task.wait()
+                            end
+                        end)
+                        task.spawn(function()
+                            while true do
+                                game:GetService("ReplicatedStorage").Remotes.FinishedBossVictoryDialogue:FireServer()
+                                task.wait(.1)
+                            end
+                        end)
+                        task.spawn(function()
+                            while true do
+                                workspace.Map.Components.GloveIsland.ClaimGlove.ProximityPrompt.HoldDuration = 0
+                                pcall(fireproximityprompt, workspace.Map.Components.GloveIsland.ClaimGlove.ProximityPrompt)
+                                task.wait(1)
+                            end
+                        end)
+                    end
+                end)]])
+
+                TeleportToPosition(CFrame.new(317, 40, 197), 2)
+                local ringDeadline = tick() + 180
+                repeat
+                    task.wait(.5)
+                    if ReplicatedStorage:FindFirstChild("RetroAbility") then
+                        ReplicatedStorage.RetroAbility:FireServer("Ban Hammer")
+                    end
+                until RingOfFireSpawned() or tick() > ringDeadline
+                if not RingOfFireSpawned() then
+                    WindUI:Notify({ Title = "Error!", Content = "Ring of Fire never spawned, aborting", Duration = 3 })
+                    return
+                end
+                TeleportToPosition(CFrame.new(310, 34, 191), 2)
+            end)
         end
     })
 
