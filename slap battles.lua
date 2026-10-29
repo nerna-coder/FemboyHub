@@ -60,6 +60,164 @@ local Workspace = game:GetService("Workspace")
 local lp = Players.LocalPlayer
 local placeId = game.PlaceId
 
+
+local Backgrounds = {
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/photo_2026-10-29_11-35-01.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/2.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/1.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/4.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/6.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/5.jpg",
+    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/7.jpg",
+}
+
+local randomIndex = math.random(1, #Backgrounds)
+local filename = "NexerStuff/Pictures/bg_" .. randomIndex .. ".jpg"
+writefile(filename, game:HttpGet(Backgrounds[randomIndex]))
+local customBg = getcustomasset(filename)
+
+
+local function CreateWindow(title)
+    return WindUI:CreateWindow({
+        Title = title,
+        Icon = "rbxassetid://125491158830304",
+        Author = "by silentabsolutedayn and nerna-coder",
+        Background = customBg,
+        Transparency = 0.15,
+        BackgroundImageTransparency = 0.55,
+        ConfigurationSaving = { Enabled = true, FolderName = "FemboyHubConfig", FileName = "Config" }
+    })
+end
+
+local function t(str) return str end 
+
+local function Notification(text, duration)
+    WindUI:Notify({ Title = "Femboy Hub", Content = text, Duration = duration or 5 })
+end
+
+local function slapglove(part)
+    if not part then return end
+    local char = lp.Character
+    if not char then return end
+    local tool = char:FindFirstChildWhichIsA("Tool")
+    if tool then
+        tool:Activate()
+    end
+    local rs = game:GetService("ReplicatedStorage")
+    local remotes = rs:FindFirstChild("Remotes")
+    if remotes then
+        for _, name in ipairs({"Slap", "Hit", "Attack"}) do
+            local rem = remotes:FindFirstChild(name)
+            if rem and rem:IsA("RemoteEvent") then
+                pcall(function() rem:FireServer(part) end)
+                break
+            end
+        end
+    end
+end
+
+local function CreateFreezeBV(opts)
+    opts = opts or {}
+    local char = lp.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    if not hrp then return end
+    local name = opts.Name or "MortisFreezeBV"
+    if opts.Remove then
+        local bv = hrp:FindFirstChild(name)
+        if bv then bv:Destroy() end
+        return
+    end
+    if not hrp:FindFirstChild(name) then
+        local bv = Instance.new("BodyVelocity")
+        bv.Name = name
+        bv.Velocity = Vector3.zero
+        bv.MaxForce = Vector3.new(1e9, 1e9, 1e9)
+        bv.Parent = hrp
+    end
+end
+
+local _FlyConn = nil
+_G.SetSpeedFly = 50
+local function Fly(enabled)
+    _G.StartFly = enabled
+    local char = lp.Character
+    if not char then return end
+    local hrp = char:FindFirstChild("HumanoidRootPart")
+    local hum = char:FindFirstChildOfClass("Humanoid")
+    if not hrp or not hum then return end
+
+    if enabled then
+        hum.PlatformStand = true
+        local flyBV = hrp:FindFirstChild("FemboyFlyBV") or Instance.new("BodyVelocity")
+        flyBV.Name = "FemboyFlyBV"
+        flyBV.Velocity = Vector3.zero
+        flyBV.MaxForce = Vector3.new(1e5, 1e5, 1e5)
+        flyBV.Parent = hrp
+
+        local flyBAV = hrp:FindFirstChild("FemboyFlyBAV") or Instance.new("BodyAngularVelocity")
+        flyBAV.Name = "FemboyFlyBAV"
+        flyBAV.AngularVelocity = Vector3.zero
+        flyBAV.MaxTorque = Vector3.new(1e4, 1e4, 1e4)
+        flyBAV.Parent = hrp
+
+        if _FlyConn then _FlyConn:Disconnect() end
+        _FlyConn = RunService.Heartbeat:Connect(function()
+            if not _G.StartFly then
+                if flyBV and flyBV.Parent then flyBV:Destroy() end
+                if flyBAV and flyBAV.Parent then flyBAV:Destroy() end
+                hum.PlatformStand = false
+                if _FlyConn then _FlyConn:Disconnect() _FlyConn = nil end
+                return
+            end
+            local speed = tonumber(_G.SetSpeedFly) or 50
+            local cam = workspace.CurrentCamera
+            local vel = Vector3.zero
+            if UserInputService:IsKeyDown(Enum.KeyCode.W) then vel = vel + cam.CFrame.LookVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.S) then vel = vel - cam.CFrame.LookVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.A) then vel = vel - cam.CFrame.RightVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.D) then vel = vel + cam.CFrame.RightVector end
+            if UserInputService:IsKeyDown(Enum.KeyCode.Space) then vel = vel + Vector3.new(0, 1, 0) end
+            if UserInputService:IsKeyDown(Enum.KeyCode.LeftShift) then vel = vel - Vector3.new(0, 1, 0) end
+            if flyBV and flyBV.Parent then
+                flyBV.Velocity = vel.Magnitude > 0 and vel.Unit * speed or Vector3.zero
+            end
+        end)
+    else
+        _G.StartFly = false
+        local existBV = hrp:FindFirstChild("FemboyFlyBV")
+        local existBAV = hrp:FindFirstChild("FemboyFlyBAV")
+        if existBV then existBV:Destroy() end
+        if existBAV then existBAV:Destroy() end
+        hum.PlatformStand = false
+        if _FlyConn then _FlyConn:Disconnect() _FlyConn = nil end
+    end
+end
+
+-- Хранилище тогглов (для Teleport Shout)
+local Toggles = {}
+-- Подключения для Inf Jump и т.п.
+_G.ConnectFun = {}
+-- Старый свет
+local lighting = game:GetService("Lighting")
+local _OldLighting = {
+    Brightness = lighting.Brightness,
+    ClockTime = lighting.ClockTime,
+    FogEnd = lighting.FogEnd,
+    FogStart = lighting.FogStart,
+    GlobalShadows = lighting.GlobalShadows,
+    OutdoorAmbient = lighting.OutdoorAmbient,
+}
+_G.GetOldBright = {
+    Old = _OldLighting,
+    New = {
+        Brightness = 2, ClockTime = 14, FogEnd = 200000,
+        FogStart = 100000, GlobalShadows = false,
+        OutdoorAmbient = Color3.fromRGB(128,128,128)
+    }
+}
+-- ======================================================
+
 local function runAutoGetLotus()
     local TARGET_PLACE_ID = 93981091811742
     local player = Players.LocalPlayer
@@ -1410,6 +1568,7 @@ end
 local Window
 
 if placeId == 122902713960550 then
+    Window = CreateWindow("Femboy Hub - Sand")
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
@@ -1445,6 +1604,7 @@ if placeId == 122902713960550 then
     end)
 
 elseif placeId == 17290438723 then
+    Window = CreateWindow("Femboy Hub - Frostbite")
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
@@ -1480,6 +1640,7 @@ elseif placeId == 17290438723 then
     end)
 
 elseif placeId == 14422118326 then
+    Window = CreateWindow("Femboy Hub - Gloves")
     local ScreenGui = Instance.new("ScreenGui")
     local MainFrame = Instance.new("Frame")
     local UICorner = Instance.new("UICorner")
@@ -1608,10 +1769,7 @@ elseif placeId == 14422118326 then
     end)
 
 elseif placeId == 11828384869 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Counter & Elude",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Counter & Elude")
     local Tab = Window:Tab({Title = "Badges"})
     Tab:Button({
         Title = "Counter + Elude",
@@ -1659,10 +1817,7 @@ elseif placeId == 11828384869 then
     })
 
 elseif placeId == 18550498098 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Place 18550498098",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Place 18550498098")
     local Tab = Window:Tab({Title = "Auto-Get scripts"})
 
     Tab:Button({
@@ -2034,10 +2189,7 @@ elseif placeId == 18550498098 then
     })
 
 elseif placeId == 128229958211947 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Shellbert",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Shellbert")
     local Tab = Window:Tab({Title = "Shellbert"})
     Tab:Button({
         Title = "Auto-Get Shellbert",
@@ -2075,10 +2227,7 @@ elseif placeId == 128229958211947 then
     })
 
 elseif placeId == 89837553336708 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Suction",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Suction")
     local Tab = Window:Tab({Title = "Suction"})
     Tab:Button({
         Title = "Auto-Get suction",
@@ -2086,10 +2235,7 @@ elseif placeId == 89837553336708 then
     })
 
 elseif placeId == 74169485398268 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Bind",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Bind")
     local Tab = Window:Tab({Title = "Bind"})
     Tab:Button({
         Title = "Auto-Get bind",
@@ -2107,10 +2253,7 @@ elseif placeId == 74169485398268 then
     })
 
 elseif placeId == 129665246576996 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Eggler",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Eggler")
     local Tab = Window:Tab({Title = "Eggler"})
     Tab:Button({
         Title = "Auto-Get eggler",
@@ -2177,10 +2320,7 @@ elseif placeId == 129665246576996 then
     })
 
 elseif placeId == 106620300132058 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Plate ID",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Plate ID")
     local Tab = Window:Tab({Title = "Plate"})
     Tab:Button({
         Title = "Plate",
@@ -2201,10 +2341,7 @@ elseif placeId == 106620300132058 then
     })
 
 elseif placeId == 97220865182663 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Rat Place",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Rat Place")
     local Tab = Window:Tab({Title = "Rats"})
     Tab:Button({
         Title = "Instail kills rat",
@@ -2238,10 +2375,7 @@ elseif placeId == 97220865182663 then
     })
 
 elseif placeId == 113228834069218 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Penguin / Fish",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Penguin / Fish")
     local Tab = Window:Tab({Title = "Quest"})
     Tab:Button({
         Title = "collect all fish",
@@ -2259,10 +2393,7 @@ elseif placeId == 113228834069218 then
     })
 
 elseif placeId == 86643839793301 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Quests",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Quests")
     local Tab = Window:Tab({Title = "Quests"})
     Tab:Button({
         Title = "Teleport to Alex's quest",
@@ -2274,10 +2405,7 @@ elseif placeId == 86643839793301 then
     })
 
 elseif placeId == 95356852680586 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Snowman",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Snowman")
     local Tab = Window:Tab({Title = "Snowman"})
     Tab:Button({
         Title = "Build a snowman",
@@ -2305,10 +2433,7 @@ elseif placeId == 95356852680586 then
     })
 
 elseif placeId == 7234087065 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - ID 7234087065",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - ID 7234087065")
     local Tab = Window:Tab({Title = "Fan & Riftshot"})
     Tab:Button({
         Title = "Auto-Get Fan",
@@ -2477,10 +2602,7 @@ elseif placeId == 7234087065 then
     })
 
 elseif placeId == 136005148166028 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Metaverse ID",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Metaverse ID")
     local Tab = Window:Tab({Title = "Metaverse"})
     Tab:Button({
         Title = "Auto-Get Metaverse",
@@ -2556,10 +2678,7 @@ elseif placeId == 136005148166028 then
     })
 
 elseif placeId == 115782629143468 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - UTG ID",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - UTG ID")
     local Tab = Window:Tab({Title = "UTG"})
     Tab:Button({
         Title = "Auto-Get UTG",
@@ -2571,10 +2690,7 @@ elseif placeId == 115782629143468 then
     })
 
 elseif placeId == 118650724506449 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Snowroller",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Snowroller")
     local Tab = Window:Tab({Title = "Snowroller"})
     Tab:Button({
         Title = "Auto-Get snowroller",
@@ -2586,10 +2702,7 @@ elseif placeId == 118650724506449 then
     })
 
 elseif placeId == 79885102123162 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub")
     local Tab = Window:Tab({Title = "Collector"})
     Tab:Button({
         Title = "Auto-Get Collector",
@@ -2651,10 +2764,7 @@ elseif placeId == 79885102123162 then
     })
 
 elseif placeId == 132277598079047 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub")
     local Tab = Window:Tab({Title = "Slender"})
     Tab:Button({
         Title = "Collection Pages",
@@ -2680,10 +2790,7 @@ elseif placeId == 132277598079047 then
     })
 
 elseif placeId == 101113181694564 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Conker",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Conker")
     local Tab = Window:Tab({Title = "Conker"})
     Tab:Button({
         Title = "Auto-Get conker",
@@ -2693,10 +2800,7 @@ elseif placeId == 101113181694564 then
     })
 
 elseif placeId == 125845699717230 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Doorkeeper",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Doorkeeper")
     local Tab = Window:Tab({Title = "Doorkeeper"})
     Tab:Button({
         Title = "Auto-Get doorkeeper",
@@ -2716,10 +2820,7 @@ elseif placeId == 125845699717230 then
     })
 
 elseif placeId == 93981091811742 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Lotus",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Lotus")
     local Tab = Window:Tab({Title = "Lotus"})
     Tab:Button({
         Title = "Get lotus",
@@ -2729,10 +2830,7 @@ elseif placeId == 93981091811742 then
     })
 
 elseif placeId == 77283826005207 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - G-X ID",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - G-X ID")
     local Tab = Window:Tab({Title = "G-X"})
     Tab:Button({
         Title = "Auto-Get G-X",
@@ -2783,10 +2881,7 @@ elseif placeId == 77283826005207 then
     })
 
 elseif placeId == 13833961666 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - The Eternal Bob",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - The Eternal Bob")
     _G.AutoSlapBobBoss = false
     _G.AutoTycoon = false
     _G.SlapBobClone = false
@@ -2868,8 +2963,8 @@ elseif placeId == 13833961666 then
     TabAuto:Dropdown({
         Title = "Glove for Slap Bob Clone",
         Values = {"Tycoon", "Killstreak", "Reaper", "God's Hand"},
-        Default = Tycoon,
-                Flag = "GloveSlapDropdown",
+        Default = "Tycoon",
+        Flag = "GloveSlapDropdown",
         Callback = function(Selected)
             GloveSlap = Selected[1] or Selected
         end
@@ -3005,10 +3100,7 @@ elseif placeId == 80420091630966 then
         end
     end)
 
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Boss Mortis",
-        ConfigurationSaving = { Enabled = false }
-    })
+    Window = CreateWindow("Femboy Hub - Boss Mortis")
 
     local TabRound = Window:Tab({Title = "Rounds"})
     local TabBoss = Window:Tab({Title = "Boss"})
@@ -3166,8 +3258,7 @@ elseif placeId == 80420091630966 then
                                 for _, z in pairs(v:GetChildren()) do
                                     if z.Name == "Hook" then
                                         local prompt = z:FindFirstChild("ProximityPrompt")
-                                        if prompt then
-                                            char.HumanoidRootPart.CFrame = z.CFrame
+                                        if prompt then                                            char.HumanoidRootPart.CFrame = z.CFrame
                                             task.wait(0.4)
                                             fireproximityprompt(prompt)
                                         end
@@ -3332,8 +3423,7 @@ elseif placeId == 80420091630966 then
                                     if animCtrl and animCtrl:FindFirstChild("Animator") then
                                         local tracks = animCtrl.Animator:GetPlayingAnimationTracks()
                                         if #tracks == 0 then
-                                            if char:FindFirstChild("HumanoidRootPart") then
-                                                char.HumanoidRootPart.CFrame = v.object.CFrame * CFrame.new(0, -10, 0)
+                                            if char:FindFirstChild("HumanoidRootPart") then                                                char.HumanoidRootPart.CFrame = v.object.CFrame * CFrame.new(0, -10, 0)
                                                 char.Lantern:Activate()
                                             end
                                         else
@@ -3472,7 +3562,7 @@ elseif placeId == 80420091630966 then
     TabBoss:Input({
         Title = "Fly Speed",
         Default = "50",
-                Placeholder = "Enter fly speed...",
+        Placeholder = "Enter fly speed...",
         Callback = function(Value)
             _G.SetSpeedFly = tonumber(Value) or 50
         end
@@ -3547,46 +3637,330 @@ elseif placeId == 80420091630966 then
         end
     })
 
-elseif placeId == 82340649038345 then
-    Window = WindUI:CreateWindow({
-        Title = "Femboy Hub - Revenant",
-        ConfigurationSaving = { Enabled = false }
+elseif placeId == 77963332815593 then
+    Window = CreateWindow("Map Pim Fighter")
+
+    local Tabs = {
+        Quest = Window:Tab({Title = "Quest", Icon = "rbxassetid://4370318685"}),
+        Fighter = Window:Tab({Title = "Fighter", Icon = "rbxassetid://10734975486"}),
+        Misc = Window:Tab({Title = "Misc", Icon = "rbxassetid://4370318685"}),
+        UISettings = Window:Tab({Title = "UI Settings", Icon = "rbxassetid://7733955511"})
+    }
+
+    local Quest1Group = Tabs.Quest:Section({Title = "Quest 1"})
+
+    Quest1Group:Button({
+        Title = "Open All Chest",
+        Callback = function()
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                local OldCF = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame
+                for i, v in pairs(workspace:GetChildren()) do
+                    if v.Name:lower():find("basicchest") and v:FindFirstChild("Base") and v.Base:FindFirstChild("ProximityPrompt") then
+                        local prompt = v.Base:FindFirstChildOfClass("ProximityPrompt")
+                        if prompt then
+                            repeat task.wait()
+                                if not prompt.Parent then
+                                    break
+                                end
+                                game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.Base.CFrame * CFrame.new(0, 5, 0)
+                                if fireproximityprompt then
+                                    fireproximityprompt(prompt)
+                                end
+                            until not prompt.Parent
+                        end
+                    end
+                end
+                if OldCF then
+                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = OldCF
+                end
+            end
+        end
     })
 
-    local Tab = Window:Tab({Title = "Revenant"})
-
-    Tab:Button({
-        Title = "Auto-Get Revenant (by nexer)",
+    Quest1Group:Button({
+        Title = "Insert Key",
         Callback = function()
-            runAutoGetRevenant()
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                for i, v in pairs(game:GetService("Players").LocalPlayer.Backpack:GetChildren()) do
+                    if v:IsA("Tool") and v.Name:lower():find("key") then
+                        v.Parent = game:GetService("Players").LocalPlayer.Character
+                    end
+                end
+                for i, v in pairs(workspace.FinalRoom:GetChildren()) do
+                    if v:IsA("Model") and v.Name:lower():find("key") then
+                        game:GetService("ReplicatedStorage").Remotes.KeyLockAttempt:FireServer(v)
+                    end
+                end
+            end
+        end
+    })
+
+    local Quest2Group = Tabs.Quest:Section({Title = "Quest 2"})
+
+    Quest2Group:Button({
+        Title = "Show Light Orb",
+        Callback = function()
+            for _, v in game:GetService("CollectionService"):GetTagged("Revealable") do
+                if v:IsA("BasePart") and v:GetAttribute("LightSpawner") then
+                    local revealID = v:GetAttribute("RevealID")
+                    if revealID then
+                        game:GetService("ReplicatedStorage").Remotes.RevealLightSpawner:FireServer(revealID)
+                    end
+                end
+            end
+        end
+    })
+
+    Quest2Group:Button({
+        Title = "Slap Light Orb",
+        Callback = function()
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                for i, v in pairs(game.Workspace:GetChildren()) do
+                    if v.Name:lower():find("lightorb") then
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                        wait(0.4)
+                        slapglove(v)
+                        task.wait(0.7)
+                    end
+                end
+            end
+        end
+    })
+
+    Quest2Group:Button({
+        Title = "Teleport Boss",
+        Callback = function()
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                if workspace:FindFirstChild("StartCorridor"):FindFirstChild("FinalRing"):FindFirstChild("Trigger") then
+                    game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = workspace.StartCorridor.FinalRing.Trigger.CFrame
+                end
+            end
+        end
+    })
+
+    local BossGroup = Tabs.Fighter:Section({Title = "Boss Phase 1"})
+
+    Toggles["Auto Light Part"] = BossGroup:Toggle({
+        Title = t"Auto Blooming Light",
+        Value = false, 
+        Callback = function(Value) 
+            _G.AutoBlooming = Value
+            if not _G.AutoBlooming then
+                CreateFreezeBV({Name = "Skibidi_Light", Remove = true})
+            end
+            if _G.guideLoad then return end
+            _G.guideLoad = true
+            Notification(t"When only one flower remains unopened, you can activate the auto-blooming feature once, then deactivate it and fly to the fallen flower to tap it and make it bloom. If you don't deactivate the auto-teleport feature when you reach the boss in phase 2, it will teleport you back to your original location, cutting off your path to receive the badge, But while you're at it, you have to dodge the pims that are being ejected.", 13)
+        end
+    })
+
+    local Boss1Group = Tabs.Fighter:Section({Title = "Boss Phase 2"})
+
+    Boss1Group:Toggle({
+        Title = t"Slap Aura Laser",
+        Value = false, 
+        Callback = function(Value) 
+            _G.AutoSlapEye = Value
+            while _G.AutoSlapEye and task.wait() do
+                if workspace:FindFirstChild("LaserEye") and workspace.LaserEye:FindFirstChild("Base") and workspace.LaserEye:GetAttribute("Stunned") then
+                    slapglove(workspace.LaserEye.Base)
+                end
+            end
+        end
+    })
+
+    Boss1Group:Toggle({
+        Title = t"Slap Aura Chomper",
+        Value = false, 
+        Callback = function(Value) 
+            _G.AutoSlapChomper = Value
+            while _G.AutoSlapChomper and task.wait() do
+                if workspace:FindFirstChild("ChomperEye") and workspace.ChomperEye:FindFirstChild("Hitbox") and workspace.ChomperEye:GetAttribute("Stunned") then
+                    slapglove(workspace.ChomperEye.Hitbox)
+                end
+            end
+        end
+    })
+
+    Toggles["Auto Shout"] = Boss1Group:Toggle({
+        Title = t"Auto Shout",
+        Value = false, 
+        Callback = function(Value) 
+            _G.AutoShout = Value
+            if Toggles and Toggles["Teleport Shout"] then
+                Toggles["Teleport Shout"]:SetVisible(Value)
+            end
+            while _G.AutoShout and task.wait() do
+                for i, v in pairs(workspace:GetChildren()) do
+                    if v:IsA("Model") and v.Name:lower():find("eye") and v:FindFirstChild("Base") and v:GetAttribute("Vulnerable") and not v:GetAttribute("Stunned") then
+                        local Character = game.Players.LocalPlayer.Character
+                        local Root = Character and Character:FindFirstChild("HumanoidRootPart")
+                        if Root then
+                            if _G.TeleportShout then
+                                Root.CFrame = v.Base.CFrame
+                            end
+                            game:GetService("ReplicatedStorage").Remotes.ActivateAbility:FireServer("Shout", (v.Base.Position - Root.Position).Unit)
+                        end
+                    end
+                end
+            end
+        end
+    })
+
+    Toggles["Teleport Shout"] = Boss1Group:Toggle({
+        Title = t"Teleport Shout",
+        Value = false,
+        Visible = false,
+        Callback = function(Value) 
+            _G.TeleportShout = Value
+        end
+    })
+
+    local MiscGroup = Tabs.Misc:Section({Title = "Misc"})
+
+    MiscGroup:Toggle({
+        Title = t"No Cooldown Proximity",
+        Value = false, 
+        Callback = function(Value) 
+            _G.NoCooldownProximity = Value
+            if _G.NoCooldownProximity == true then
+                for i, v in pairs(workspace:GetDescendants()) do
+                    if v.ClassName == "ProximityPrompt" then
+                        v.HoldDuration = 0
+                    end
+                end
+            else
+                if CooldownProximity then
+                    CooldownProximity:Disconnect()
+                    CooldownProximity = nil
+                end
+            end
+            CooldownProximity = workspace.DescendantAdded:Connect(function(Cooldown)
+                if _G.NoCooldownProximity == true then
+                    if Cooldown:IsA("ProximityPrompt") then
+                        Cooldown.HoldDuration = 0
+                    end
+                end
+            end)
+        end
+    })
+
+    MiscGroup:Input({
+        Title = t"Fly Speed",
+        Default = "50",
+        Placeholder = "UserFlySpeed",
+        Callback = function(Value)  
+            _G.SetSpeedFly = Value  
+        end  
+    })
+
+    _G.SetSpeedFly = 50
+    MiscGroup:Toggle({
+        Title = t"Start Fly",
+        Value = false, 
+        Callback = function(Value) 
+            Fly(Value)
+        end
+    }):AddKeyPicker("Fly", {
+       Default = "G",
+       Text = t"Fly",
+       Mode = "Toggle",
+       SyncToggleState = true
+    })
+
+    MiscGroup:Toggle({
+        Title = t"Full Bright",
+        Value = false, 
+        Callback = function(Value) 
+            _G.FullBright = Value
+            if not _G.FullBright then
+                for i, v in pairs(_G.GetOldBright.Old) do
+                    game:GetService("Lighting")[i] = v
+                end
+            else
+                for i, v in pairs(_G.GetOldBright.New) do
+                    game:GetService("Lighting")[i] = v
+                end
+            end
+        end
+    })
+
+    MiscGroup:Toggle({
+        Title = t"No Fog",
+        Value = false, 
+        Callback = function(Value) 
+            _G.Nofog = Value
+            while _G.Nofog do
+                for i, v in pairs(game:GetService("Lighting"):GetChildren()) do
+                    if v.ClassName == "Atmosphere" then
+                        v.Density = 0
+                        v.Haze = 0
+                    end
+                end
+                task.wait()
+            end
+            for i, v in pairs(game:GetService("Lighting"):GetChildren()) do
+                if v.ClassName == "Atmosphere" then
+                    v.Density = 0.3
+                    v.Haze = 1
+                end
+            end
+        end
+    })
+
+    MiscGroup:Toggle({
+        Title = t"Inf Jump",
+        Value = false, 
+        Callback = function(Value) 
+            _G.InfJump = Value
+        end
+    })
+
+    table.insert(_G.ConnectFun, game:GetService("UserInputService").JumpRequest:Connect(function()
+        if _G.InfJump then
+            game.Players.LocalPlayer.Character:FindFirstChildOfClass("Humanoid"):ChangeState("Jumping")
+        end
+    end))
+
+    local Misc1Group = Tabs.Misc:Section({Title = "Other"})
+
+    Misc1Group:Toggle({
+        Title = t"Inf Mana",
+        Value = false, 
+        Callback = function(Value)
+            _G.InfMana = Value
+            while _G.InfMana and task.wait() do
+                game:GetService("ReplicatedStorage").Remotes.ManaSpend:FireServer(-100)
+            end
+        end
+    })
+
+    Misc1Group:Button({
+        Title = "Give Inf Mana",
+        Callback = function()
+            game:GetService("ReplicatedStorage").Remotes.ManaSpend:FireServer(-math.huge)
+        end
+    })
+
+    Misc1Group:Toggle({
+        Title = t"Anti Ring",
+        Value = false, 
+        Callback = function(Value) 
+            _G.AntiRing = Value
+        end
+    })
+
+    Misc1Group:Toggle({
+        Title = t"Anti Ducks",
+        Value = false, 
+        Callback = function(Value) 
+            _G.AntiDucks = Value
         end
     })
 
 else
-  local Backgrounds = {
-    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/photo_2026-10-29_11-35-01.jpg",
-    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/2.jpg",
-    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/1.jpg",
-    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/4.jpg",
-    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/6.jpg",
-    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/5.jpg",
-    "https://raw.githubusercontent.com/nerna-coder/boykiser_image/refs/heads/main/7.jpg",
-}
+    Window = CreateWindow("Femboy Hub")
 
-
-
-local randomIndex = math.random(1, #Backgrounds)
-local filename = "NexerStuff/Pictures/bg_" .. randomIndex .. ".jpg"
-writefile(filename, game:HttpGet(Backgrounds[randomIndex]))
-Window = WindUI:CreateWindow({
-    Title = "Femboy Hub",
-    Icon = "rbxassetid://125491158830304",
-    Author = "by silentabsolutedayn and nerna-coder",
-    Background = getcustomasset(filename),
-    Transparency = 0.15,
-    BackgroundImageTransparency = 0.55,
-    ConfigurationSaving = { Enabled = true, FolderName = "FemboyHubConfig", FileName = "Config" }
-})
     local currentJob = game.JobId
     local req = (syn and syn.request) or (http and http.request) or http_request or request
 
