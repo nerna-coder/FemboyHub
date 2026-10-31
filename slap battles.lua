@@ -194,11 +194,11 @@ local function Fly(enabled)
     end
 end
 
--- Хранилище тогглов (для Teleport Shout)
+
 local Toggles = {}
--- Подключения для Inf Jump и т.п.
+
 _G.ConnectFun = {}
--- Старый свет
+
 local lighting = game:GetService("Lighting")
 local _OldLighting = {
     Brightness = lighting.Brightness,
@@ -2601,6 +2601,72 @@ elseif placeId == 7234087065 then
         end
     })
 
+    elseif placeId == 102908326578005 then
+    Window = CreateWindow("Femboy Hub - Clock")
+    local Tab = Window:Tab({Title = "Clock"})
+    Tab:Button({
+        Title = "Auto-Get Clock",
+        Callback = function()
+            task.spawn(function()
+                if game.PlaceId ~= 102908326578005 then return end
+
+                repeat task.wait() until lp.Character and lp.Character:FindFirstChild("HumanoidRootPart")
+
+                local key
+                repeat
+                    for _, obj in next, workspace:GetDescendants() do
+                        if obj:IsA("ClickDetector") and obj.Parent and obj.Parent.Parent and obj.Parent.Parent.Name ~= "Key Pad" then
+                            pcall(fireclickdetector, obj)
+                        end
+                    end
+                    task.wait(0.1)
+                    if lp.Character and lp.Character:FindFirstChild("Key") then
+                        break
+                    end
+                    key = lp.Backpack:FindFirstChild("Key")
+                until key
+
+                task.wait(0.5)
+
+                local targetCFrame = CFrame.new(
+                    27.8107, 4.2501, -1.1089,
+                    0.0039, -0.0000, -1.0000,
+                    -0.0000, 1.0000, -0.0000,
+                    1.0000, 0.0000, 0.0039
+                )
+
+                local char = lp.Character
+                local hrp = char and char:FindFirstChild("HumanoidRootPart")
+                if hrp then
+                    hrp.CFrame = targetCFrame
+                end
+
+                task.wait(0.3)
+
+                pcall(function()
+                    local vim = game:GetService("VirtualInputManager")
+                    vim:SendKeyEvent(true, Enum.KeyCode.Three, false, game)
+                    task.wait(0.1)
+                    vim:SendKeyEvent(false, Enum.KeyCode.Three, false, game)
+                end)
+
+                pcall(function()
+                    local vu = game:GetService("VirtualUser")
+                    vu:Button1Down(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+                    vu:Button1Up(Vector2.new(0, 0), workspace.CurrentCamera.CFrame)
+                end)
+
+                pcall(function()
+                    local char = lp.Character
+                    if char then
+                        local tool = char:FindFirstChildOfClass("Tool")
+                        if tool then tool:Activate() end
+                    end
+                end)
+            end)
+        end
+    })
+
 elseif placeId == 136005148166028 then
     Window = CreateWindow("Femboy Hub - Metaverse ID")
     local Tab = Window:Tab({Title = "Metaverse"})
@@ -3638,7 +3704,7 @@ elseif placeId == 80420091630966 then
     })
 
 elseif placeId == 77963332815593 then
-    Window = CreateWindow("Map Pim Fighter")
+    Window = CreateWindow("Map Pim Fighter ⚔️")
 
     local Tabs = {
         Quest = Window:Tab({Title = "Quest", Icon = "rbxassetid://4370318685"}),
@@ -3712,27 +3778,20 @@ elseif placeId == 77963332815593 then
     })
 
     Quest2Group:Button({
-    Title = "Slap Light Orb",
-    Callback = function()
-        local char = game:GetService("Players").LocalPlayer.Character
-        if not char or not char:FindFirstChild("HumanoidRootPart") then return end
-        local hrp = char.HumanoidRootPart
-        for _, v in pairs(workspace:GetChildren()) do
-            if v.Name:lower():find("lightorb") then
-                hrp.CFrame = v.CFrame
-                task.wait(0.4)
-                local tool = char:FindFirstChildWhichIsA("Tool")
-                if tool then tool:Activate() end
-                for _, remote in pairs(char:GetDescendants()) do
-                    if remote:IsA("RemoteEvent") and remote.Name == "Network" then
-                        pcall(function() remote:FireServer("Hit", v) end)
+        Title = "Slap Light Orb",
+        Callback = function()
+            if game:GetService("Players").LocalPlayer.Character:FindFirstChild("HumanoidRootPart") then
+                for i, v in pairs(game.Workspace:GetChildren()) do
+                    if v.Name:lower():find("lightorb") then
+                        game:GetService("Players").LocalPlayer.Character.HumanoidRootPart.CFrame = v.CFrame
+                        wait(0.4)
+                        slapglove(v)
+                        task.wait(0.7)
                     end
                 end
-                task.wait(0.7)
             end
         end
-    end
-})
+    })
 
     Quest2Group:Button({
         Title = "Teleport Boss",
@@ -3768,11 +3827,13 @@ elseif placeId == 77963332815593 then
         Value = false, 
         Callback = function(Value) 
             _G.AutoSlapEye = Value
-            while _G.AutoSlapEye and task.wait() do
-                if workspace:FindFirstChild("LaserEye") and workspace.LaserEye:FindFirstChild("Base") and workspace.LaserEye:GetAttribute("Stunned") then
-                    slapglove(workspace.LaserEye.Base)
+            task.spawn(function()
+                while _G.AutoSlapEye and task.wait() do
+                    if workspace:FindFirstChild("LaserEye") and workspace.LaserEye:FindFirstChild("Base") and workspace.LaserEye:GetAttribute("Stunned") then
+                        slapglove(workspace.LaserEye.Base)
+                    end
                 end
-            end
+            end)
         end
     })
 
@@ -3781,11 +3842,13 @@ elseif placeId == 77963332815593 then
         Value = false, 
         Callback = function(Value) 
             _G.AutoSlapChomper = Value
-            while _G.AutoSlapChomper and task.wait() do
-                if workspace:FindFirstChild("ChomperEye") and workspace.ChomperEye:FindFirstChild("Hitbox") and workspace.ChomperEye:GetAttribute("Stunned") then
-                    slapglove(workspace.ChomperEye.Hitbox)
+            task.spawn(function()
+                while _G.AutoSlapChomper and task.wait() do
+                    if workspace:FindFirstChild("ChomperEye") and workspace.ChomperEye:FindFirstChild("Hitbox") and workspace.ChomperEye:GetAttribute("Stunned") then
+                        slapglove(workspace.ChomperEye.Hitbox)
+                    end
                 end
-            end
+            end)
         end
     })
 
@@ -3794,30 +3857,28 @@ elseif placeId == 77963332815593 then
         Value = false, 
         Callback = function(Value) 
             _G.AutoShout = Value
-            if Toggles and Toggles["Teleport Shout"] then
-                Toggles["Teleport Shout"]:SetVisible(Value)
-            end
-            while _G.AutoShout and task.wait() do
-                for i, v in pairs(workspace:GetChildren()) do
-                    if v:IsA("Model") and v.Name:lower():find("eye") and v:FindFirstChild("Base") and v:GetAttribute("Vulnerable") and not v:GetAttribute("Stunned") then
-                        local Character = game.Players.LocalPlayer.Character
-                        local Root = Character and Character:FindFirstChild("HumanoidRootPart")
-                        if Root then
-                            if _G.TeleportShout then
-                                Root.CFrame = v.Base.CFrame
+            task.spawn(function()
+                while _G.AutoShout and task.wait() do
+                    for i, v in pairs(workspace:GetChildren()) do
+                        if v:IsA("Model") and v.Name:lower():find("eye") and v:FindFirstChild("Base") and v:GetAttribute("Vulnerable") and not v:GetAttribute("Stunned") then
+                            local Character = game.Players.LocalPlayer.Character
+                            local Root = Character and Character:FindFirstChild("HumanoidRootPart")
+                            if Root then
+                                if _G.TeleportShout then
+                                    Root.CFrame = v.Base.CFrame
+                                end
+                                game:GetService("ReplicatedStorage").Remotes.ActivateAbility:FireServer("Shout", (v.Base.Position - Root.Position).Unit)
                             end
-                            game:GetService("ReplicatedStorage").Remotes.ActivateAbility:FireServer("Shout", (v.Base.Position - Root.Position).Unit)
                         end
                     end
                 end
-            end
+            end)
         end
     })
 
     Toggles["Teleport Shout"] = Boss1Group:Toggle({
         Title = t"Teleport Shout",
         Value = false,
-        Visible = false,
         Callback = function(Value) 
             _G.TeleportShout = Value
         end
@@ -3868,12 +3929,15 @@ elseif placeId == 77963332815593 then
         Callback = function(Value) 
             Fly(Value)
         end
-    }):AddKeyPicker("Fly", {
-       Default = "G",
-       Text = t"Fly",
-       Mode = "Toggle",
-       SyncToggleState = true
     })
+    
+    UserInputService.InputBegan:Connect(function(input, processed)
+        if processed then return end
+        if input.KeyCode == Enum.KeyCode.R then
+            _G.StartFly = not _G.StartFly
+            Fly(_G.StartFly)
+        end
+    end)
 
     MiscGroup:Toggle({
         Title = t"Full Bright",
@@ -3897,21 +3961,23 @@ elseif placeId == 77963332815593 then
         Value = false, 
         Callback = function(Value) 
             _G.Nofog = Value
-            while _G.Nofog do
+            task.spawn(function()
+                while _G.Nofog do
+                    for i, v in pairs(game:GetService("Lighting"):GetChildren()) do
+                        if v.ClassName == "Atmosphere" then
+                            v.Density = 0
+                            v.Haze = 0
+                        end
+                    end
+                    task.wait()
+                end
                 for i, v in pairs(game:GetService("Lighting"):GetChildren()) do
                     if v.ClassName == "Atmosphere" then
-                        v.Density = 0
-                        v.Haze = 0
+                        v.Density = 0.3
+                        v.Haze = 1
                     end
                 end
-                task.wait()
-            end
-            for i, v in pairs(game:GetService("Lighting"):GetChildren()) do
-                if v.ClassName == "Atmosphere" then
-                    v.Density = 0.3
-                    v.Haze = 1
-                end
-            end
+            end)
         end
     })
 
@@ -3936,9 +4002,11 @@ elseif placeId == 77963332815593 then
         Value = false, 
         Callback = function(Value)
             _G.InfMana = Value
-            while _G.InfMana and task.wait() do
-                game:GetService("ReplicatedStorage").Remotes.ManaSpend:FireServer(-100)
-            end
+            task.spawn(function()
+                while _G.InfMana and task.wait() do
+                    game:GetService("ReplicatedStorage").Remotes.ManaSpend:FireServer(-100)
+                end
+            end)
         end
     })
 
@@ -3965,8 +4033,86 @@ elseif placeId == 77963332815593 then
         end
     })
 
+    
+
 else
     Window = CreateWindow("Femboy Hub")
+
+        
+    if placeId == 98726100529621 then
+        Window = CreateWindow("Femboy Hub - The White Place")
+        local Tab = Window:Tab({Title = "Hexa"})
+        Tab:Button({
+            Title = "Auto-Get Hexa",
+            Desc = "Full obby sequence",
+            Callback = function()
+                task.spawn(function()
+                    local char = lp.Character or lp.CharacterAdded:Wait()
+                    local hrp = char:WaitForChild("HumanoidRootPart")
+
+                    if workspace:FindFirstChild("Part I") then
+                        local p1 = workspace["Part I"]
+                        if p1:FindFirstChild("Obby") and p1.Obby:FindFirstChild("end") then
+                            firetouchinterest(hrp, p1.Obby["end"], 0)
+                            task.wait(0.1)
+                            firetouchinterest(hrp, p1.Obby["end"], 1)
+                        end
+                    end
+                    task.wait(8)
+
+                    if workspace:FindFirstChild("Part 2") then
+                        hrp.CFrame = CFrame.new(95.2827454, 17.6107025, 646.490295, 0.99940294, 2.98956948E-9, -0.0345510729, -1.35559275E-13, 1, 8.65221708E-8, 0.0345510729, -8.64705072E-8, 0.99940294)
+                        task.wait(1)
+                        local p2 = workspace["Part 2"]
+                        if p2:FindFirstChild("Portal") then
+                            hrp.CFrame = p2.Portal.CFrame
+                        end
+                    end
+                    task.wait(5)
+
+                    if workspace:FindFirstChild("Part 3") then
+                        local p3 = workspace["Part 3"]
+                        if p3:FindFirstChild("TpToNext") and p3.TpToNext:FindFirstChild("HitBox") then
+                            local click = p3.TpToNext.HitBox:FindFirstChild("Click")
+                            if click then fireclickdetector(click) end
+                        end
+                    end
+                    task.wait(8)
+
+                    if workspace:FindFirstChild("Part 4") then
+                        local p4 = workspace["Part 4"]
+                        if p4:FindFirstChild("TPPart") then
+                            firetouchinterest(hrp, p4.TPPart, 0)
+                            task.wait(0.1)
+                            firetouchinterest(hrp, p4.TPPart, 1)
+                        end
+                    end
+                    task.wait(5)
+
+                    if workspace:FindFirstChild("Part 5") then
+                        local p5 = workspace["Part 5"]
+                        if p5:FindFirstChild("Glove") and p5.Glove:FindFirstChild("Hitbox") then
+                            local click = p5.Glove.Hitbox:FindFirstChild("Click")
+                            if click then fireclickdetector(click) end
+                        end
+                    end
+                    task.wait(5)
+
+                    if workspace:FindFirstChild("Finale") then
+                        local fin = workspace.Finale
+                        if fin:FindFirstChild("Reward") and fin.Reward:FindFirstChild("Hitbox") then
+                            local click = fin.Reward.Hitbox:FindFirstChild("Click")
+                            if click then fireclickdetector(click) end
+                        end
+                    end
+
+                    WindUI:Notify({ Title = "Hexa", Content = "Sequence finished", Duration = 5 })
+                end)
+            end
+        })
+        return 
+    end
+    
 
     local currentJob = game.JobId
     local req = (syn and syn.request) or (http and http.request) or http_request or request
@@ -4042,6 +4188,258 @@ else
         end
     })
 
+        Tab1:Button({
+        Title = "Auto-Get Undead",
+        Desc = "You must have Clock by nexer.",
+        Callback = function()
+            task.spawn(function()
+                local char = lp.Character or lp.CharacterAdded:Wait()
+                local hrp = char:WaitForChild("HumanoidRootPart")
+                local hum = char:WaitForChild("Humanoid")
+
+                if char:FindFirstChild("entered") then
+                    WindUI:Notify({
+                        Title = "Error!",
+                        Content = "You have to use this in lobby!",
+                        Duration = 3,
+                    })
+                    return
+                end
+
+                local function SelectGlove(gloveName)
+                    local ok, equip = pcall(function()
+                        local network = require(ReplicatedStorage.BACKEND.Lib.Network)
+                        local upval = debug.getupvalues(network.fireServer)[3]
+                        return upval("SelectGlove")
+                    end)
+                    if ok and equip then
+                        equip:FireServer(gloveName)
+                    else
+                        warn("[Undead] Failed to select glove")
+                    end
+                end
+
+                if lp.leaderstats.Glove.Value ~= "Clock" then
+                    SelectGlove("Clock")
+                    task.wait(0.5)
+                end
+
+                
+                local teleport1 = workspace:FindFirstChild("Lobby")
+                    and workspace.Lobby:FindFirstChild("Teleport1")
+                if teleport1 then
+                    hrp.CFrame = teleport1.CFrame + Vector3.new(0, 3, 0)
+                end
+                pcall(function()
+                    ReplicatedStorage.GlitchTP:FireServer(true)
+                end)
+                task.wait(0.5)
+
+                
+                local platform4 = workspace:FindFirstChild("platform4")
+                if platform4 then
+                    hrp.CFrame = platform4.CFrame * CFrame.new(0, 10, 0)
+                end
+                task.wait(2)
+
+                ReplicatedStorage.GeneralAbility:FireServer(hrp.CFrame)
+
+                repeat task.wait() until workspace:FindFirstChild(lp.Name .. "'s clock")
+                task.wait(1)
+
+                local clock = workspace[lp.Name .. "'s clock"]
+                repeat task.wait()
+                until clock.Hitbox.BillboardGui.current_ability.Text == "Revive Time"
+
+                repeat task.wait()
+                until clock.Hitbox.BillboardGui.current_ability.Text ~= "Revive Time"
+
+                hrp:PivotTo(CFrame.new(114, -45, 2))
+                repeat task.wait() until hum.Health == 0
+
+                WindUI:Notify({
+                    Title = "Undead",
+                    Content = "Done! Check your badges.",
+                    Duration = 5,
+                })
+            end)
+        end
+    })
+
+        Tab1:Button({
+        Title = "Auto-Get Plate",
+        Desc = "Teleports to Plate place",
+        Callback = function()
+            pcall(function()
+                TeleportService:Teleport(106620300132058, lp)
+            end)
+        end
+    })
+
+        Tab1:Button({
+        Title = "Auto-Get RNG",
+        Desc = "You must have Dice.",
+        Callback = function()
+            task.spawn(function()
+                local char = lp.Character or lp.CharacterAdded:Wait()
+                local hrp = char:WaitForChild("HumanoidRootPart")
+                local hum = char:WaitForChild("Humanoid")
+
+                if char:FindFirstChild("entered") then
+                    WindUI:Notify({
+                        Title = "Error!",
+                        Content = "You have to use this in lobby!",
+                        Duration = 3,
+                    })
+                    return
+                end
+
+                local function SelectGlove(gloveName)
+                    local ok, equip = pcall(function()
+                        local network = require(ReplicatedStorage.BACKEND.Lib.Network)
+                        local upval = debug.getupvalues(network.fireServer)[3]
+                        return upval("SelectGlove")
+                    end)
+                    if ok and equip then
+                        equip:FireServer(gloveName)
+                    else
+                        warn("[RNG] Failed to select glove")
+                    end
+                end
+
+                if lp.leaderstats.Glove.Value ~= "Dice" then
+                    SelectGlove("Dice")
+                    task.wait(0.5)
+                end
+
+                
+                local teleport1 = workspace:FindFirstChild("Lobby")
+                    and workspace.Lobby:FindFirstChild("Teleport1")
+                if teleport1 then
+                    hrp.CFrame = teleport1.CFrame + Vector3.new(0, 3, 0)
+                end
+                pcall(function()
+                    ReplicatedStorage.GlitchTP:FireServer(true)
+                end)
+                task.wait(0.5)
+
+                
+                local platform4 = workspace:FindFirstChild("platform4")
+                if platform4 then
+                    hrp.CFrame = platform4.CFrame * CFrame.new(0, 10, 0)
+                end
+                task.wait(2)
+
+                
+                local function collectMannequins()
+                    local list = {}
+                    for _, v in ipairs(workspace:GetDescendants()) do
+                        if v:IsA("Model") and string.find(v.Name:lower(), "mannequin") then
+                            local root = v:FindFirstChild("HumanoidRootPart") or v.PrimaryPart
+                            if root then
+                                table.insert(list, root)
+                            end
+                        end
+                    end
+                    return list
+                end
+
+                local mannequins = collectMannequins()
+                if #mannequins == 0 then
+                    WindUI:Notify({
+                        Title = "RNG",
+                        Content = "No mannequins found in arena.",
+                        Duration = 4,
+                    })
+                    return
+                end
+
+                local diceHit = ReplicatedStorage:FindFirstChild("DiceHit")
+                if not diceHit then
+                    WindUI:Notify({
+                        Title = "RNG",
+                        Content = "DiceHit remote not found.",
+                        Duration = 4,
+                    })
+                    return
+                end
+
+                
+                local startTime = tick()
+                local TIMEOUT = 300 
+                local gotMoney = false
+
+                while tick() - startTime < TIMEOUT do
+                    if hum.Health <= 0 then break end
+
+                    
+                    if #mannequins == 0 or (tick() - startTime) % 5 < 0.1 then
+                        mannequins = collectMannequins()
+                    end
+
+                    for _, m in ipairs(mannequins) do
+                        if m and m.Parent then
+                            pcall(function()
+                                diceHit:FireServer(m)
+                            end)
+                        end
+                    end
+
+                    if hrp:FindFirstChild("money") then
+                        gotMoney = true
+                        break
+                    end
+
+                    task.wait(0.05)
+                end
+
+                WindUI:Notify({
+                    Title = "RNG",
+                    Content = gotMoney and "Money received! Check badges." or "Finished (timeout / dead).",
+                    Duration = 5,
+                })
+            end)
+        end
+    })
+
+        Tab1:Button({
+        Title = "Auto-Get Hexa",
+        Desc = "Equip Obby",
+        Callback = function()
+            task.spawn(function()
+                local char = lp.Character or lp.CharacterAdded:Wait()
+                if char:FindFirstChild("entered") then
+                    WindUI:Notify({ Title = "Error!", Content = "Use this in lobby!", Duration = 3 })
+                    return
+                end
+
+                local hasBadge = false
+                pcall(function()
+                    hasBadge = BadgeService:UserHasBadgeAsync(lp.UserId, 2130463063)
+                end)
+                if not hasBadge then
+                    WindUI:Notify({ Title = "Obby", Content = "You do not own Obby!", Duration = 4 })
+                    return
+                end
+
+                if lp.leaderstats.Glove.Value == "Obby" then
+                    WindUI:Notify({ Title = "Obby", Content = "Already equipped Obby", Duration = 3 })
+                    return
+                end
+
+                local obby = workspace:FindFirstChild("Lobby") and workspace.Lobby:FindFirstChild("Obby")
+                local cd = obby and obby:FindFirstChild("ClickDetector")
+                if cd then
+                    fireclickdetector(cd)
+                    WindUI:Notify({ Title = "Obby", Content = "Equipped Obby", Duration = 3 })
+                else
+                    WindUI:Notify({ Title = "Error!", Content = "Obby clicker not found", Duration = 3 })
+                end
+            end)
+        end
+    })
+
+    
     Tab1:Button({
         Title = "Auto-Get Terrain",
         Callback = function()
@@ -4058,6 +4456,8 @@ else
             end)
         end
     })
+
+     
 
     Tab1:Button({
         Title = "Auto-Get Megarock",
