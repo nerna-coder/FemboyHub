@@ -4034,6 +4034,36 @@ elseif placeId == 77963332815593 then
     })
 
     
+elseif placeId == 86045914443715 then
+    Window = CreateWindow("Femboy Hub - Car Keys")
+    local Tab = Window:Tab({Title = "Car Keys"})
+    Tab:Button({
+        Title = "Auto-Get Car Keys",
+        Callback = function()
+            task.spawn(function()
+                if not game:IsLoaded() then game.Loaded:Wait() end
+
+                local Map = game:GetService("Workspace"):WaitForChild("Map")
+                pcall(function() Map.Racetrack:Destroy() end)
+                pcall(function() Map.kill_bricks:Destroy() end)
+
+                local hrp = game:GetService("Players").LocalPlayer.Character.HumanoidRootPart
+
+                local align = Instance.new("AlignPosition", hrp)
+                align.Attachment0 = Instance.new("Attachment", hrp)
+                align.Mode = Enum.PositionAlignmentMode.OneAttachment
+                align.MaxForce = math.huge
+
+                for i = 1, #Map.Waypoints:GetChildren() do
+                    align.Position = Map.Waypoints[tostring(i)].CFrame.Position
+                    repeat task.wait() until
+                        (hrp.CFrame.Position - Map.Waypoints[tostring(i)].CFrame.Position).Magnitude <= 100
+                end
+
+                align.Position = Vector3.new(-1431, 425, -859)
+            end)
+        end
+    })
 
 else
     Window = CreateWindow("Femboy Hub")
